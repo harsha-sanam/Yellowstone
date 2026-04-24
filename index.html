@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Yellowstone & Grand Teton — June 5–9, 2026</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',-apple-system,BlinkMacSystemFont,sans-serif;height:100vh;overflow:hidden;
+  background:#0f172a;-webkit-tap-highlight-color:transparent}
+.container{display:flex;height:100vh}
+.itinerary{width:440px;min-width:440px;display:flex;flex-direction:column;background:#fff;z-index:10}
+.header{padding:20px 24px;background:linear-gradient(135deg,#1e293b 0%,#334155 100%);color:#fff}
+.header h1{font-size:20px;font-weight:700;letter-spacing:-0.3px}
+.header p{font-size:13px;color:#94a3b8;margin-top:4px}
+.tabs{display:flex;background:#f8fafc;border-bottom:2px solid #e2e8f0;padding:0 8px}
+.tab{flex:1;padding:14px 4px 12px;text-align:center;cursor:pointer;font-size:12px;font-weight:600;
+  color:#94a3b8;border-bottom:3px solid transparent;margin-bottom:-2px;transition:all .2s;
+  text-transform:uppercase;letter-spacing:0.5px}
+.tab:hover{color:#475569;background:#f1f5f9}
+.tab.active{color:var(--day-color);border-bottom-color:var(--day-color);background:#fff}
+.day-subtitle{padding:16px 20px 8px;font-size:13px;color:#64748b;font-weight:500;
+  border-bottom:1px solid #f1f5f9;background:#fafbfc}
+.day-stats{display:flex;gap:16px;padding:8px 20px 12px;background:#fafbfc;border-bottom:1px solid #e2e8f0}
+.stat{font-size:11px;color:#94a3b8}
+.stat strong{color:#475569}
+.stops{flex:1;overflow-y:auto;padding:8px 12px;-webkit-overflow-scrolling:touch}
+.stops::-webkit-scrollbar{width:6px}
+.stops::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:3px}
+.stop-card{display:flex;padding:12px;border-radius:10px;margin-bottom:2px;cursor:pointer;
+  transition:all .25s ease;border:1.5px solid transparent;position:relative}
+.stop-card:hover,.stop-card.highlighted{background:color-mix(in srgb,var(--day-color) 8%,white);
+  border-color:color-mix(in srgb,var(--day-color) 40%,white)}
+.stop-card.highlighted{box-shadow:0 0 0 1px color-mix(in srgb,var(--day-color) 25%,white)}
+.stop-num{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:700;color:#fff;margin-right:12px;margin-top:1px;flex-shrink:0;
+  box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.stop-time{font-size:11px;color:#94a3b8;font-weight:600;min-width:64px;padding-top:2px;margin-right:4px;
+  font-variant-numeric:tabular-nums}
+.stop-info{flex:1;min-width:0}
+.stop-name{font-size:13.5px;font-weight:600;color:#1e293b;line-height:1.3}
+.stop-desc{font-size:12px;color:#64748b;margin-top:3px;line-height:1.5}
+.stop-badges{display:flex;gap:4px;margin-top:5px;flex-wrap:wrap}
+.badge{font-size:10px;font-weight:600;padding:2px 7px;border-radius:4px;text-transform:uppercase;letter-spacing:0.3px}
+.badge-drive{background:#dbeafe;color:#2563eb}
+.badge-eat{background:#fef3c7;color:#d97706}
+.badge-hike{background:#d1fae5;color:#059669}
+.badge-see{background:#ede9fe;color:#7c3aed}
+.badge-stay{background:#fce7f3;color:#db2777}
+.badge-photo{background:#ffedd5;color:#ea580c}
+.badge-shop{background:#f0fdf4;color:#16a34a}
+#map{flex:1;height:100vh}
+.leaflet-popup-content-wrapper{border-radius:10px;box-shadow:0 4px 20px rgba(0,0,0,.15)}
+.leaflet-popup-content{margin:10px 14px;font-family:'Segoe UI',sans-serif}
+.popup-name{font-weight:700;font-size:13px;color:#1e293b}
+.popup-time{font-size:11px;color:#64748b;margin-top:2px}
+.popup-desc{font-size:12px;color:#475569;margin-top:4px;line-height:1.4}
+.connector{position:absolute;left:24px;top:38px;bottom:-4px;width:2px;background:#e2e8f0}
+.stop-card:last-child .connector{display:none}
+
+/* Mobile toggle bar */
+.mobile-toggle{display:none}
+
+/* ===== MOBILE ===== */
+@media(max-width:768px){
+  .container{flex-direction:column}
+  .itinerary{width:100%;min-width:unset;order:2;flex:1;min-height:0}
+  #map{order:1;flex:none;height:38vh;min-height:180px}
+  .header{padding:12px 16px}
+  .header h1{font-size:17px}
+  .header p{font-size:11px;margin-top:2px}
+  .tabs{padding:0 2px;overflow-x:auto;-webkit-overflow-scrolling:touch;flex-shrink:0}
+  .tab{padding:10px 2px 8px;font-size:11px;letter-spacing:0.3px;white-space:nowrap}
+  .tab .tab-date{font-size:9px}
+  .day-subtitle{padding:10px 14px 4px;font-size:12px}
+  .day-stats{padding:4px 14px 8px;gap:10px}
+  .stat{font-size:10px}
+  .stops{padding:6px 8px}
+  .stop-card{padding:10px 8px;border-radius:8px}
+  .stop-num{width:22px;height:22px;font-size:10px;margin-right:8px}
+  .stop-time{font-size:10px;min-width:54px}
+  .stop-name{font-size:12.5px}
+  .stop-desc{font-size:11px;margin-top:2px;line-height:1.4}
+  .badge{font-size:9px;padding:1px 5px}
+  .connector{left:19px;top:34px}
+  .leaflet-popup-content{margin:8px 10px}
+  .popup-name{font-size:12px}
+  .popup-desc{font-size:11px}
+
+  /* Toggle bar */
+  .mobile-toggle{
+    display:flex;position:fixed;bottom:16px;left:50%;transform:translateX(-50%);
+    z-index:1000;background:#1e293b;border-radius:12px;padding:4px;gap:4px;
+    box-shadow:0 4px 20px rgba(0,0,0,.35)}
+  .toggle-btn{
+    padding:8px 20px;border-radius:9px;border:none;font-size:12px;font-weight:600;
+    cursor:pointer;transition:all .2s;color:#94a3b8;background:transparent;
+    font-family:inherit;display:flex;align-items:center;gap:5px}
+  .toggle-btn.active{background:var(--day-color,#3b82f6);color:#fff}
+  .toggle-btn svg{width:14px;height:14px;fill:currentColor}
+
+  /* View modes */
+  body.view-map .itinerary{display:none}
+  body.view-map #map{height:100vh;flex:1}
+  body.view-list #map{display:none}
+  body.view-list .itinerary{height:100vh;flex:none}
+}
+
+/* Small phones */
+@media(max-width:380px){
+  .header{padding:10px 12px}
+  .header h1{font-size:15px}
+  .stop-time{min-width:48px;font-size:9px}
+  .stop-num{width:20px;height:20px;font-size:9px;margin-right:6px}
+  .stop-name{font-size:12px}
+  .stop-desc{font-size:10.5px}
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="itinerary">
+    <div class="header">
+      <h1>Yellowstone & Grand Teton</h1>
+      <p>June 5 – 9, 2026 &middot; 2 couples &middot; 1 SUV</p>
+    </div>
+    <div class="tabs" id="tabs"></div>
+    <div id="dayInfo"></div>
+    <div class="stops" id="stops"></div>
+  </div>
+  <div id="map"></div>
+</div>
+
+<!-- Mobile toggle bar -->
+<div class="mobile-toggle" id="mobileToggle">
+  <button class="toggle-btn active" data-view="split" id="btnSplit">
+    <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="7" rx="1.5"/><rect x="2" y="14" width="20" height="7" rx="1.5"/></svg>
+    Split
+  </button>
+  <button class="toggle-btn" data-view="map" id="btnMap">
+    <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 010-5 2.5 2.5 0 010 5z"/></svg>
+    Map
+  </button>
+  <button class="toggle-btn" data-view="list" id="btnList">
+    <svg viewBox="0 0 24 24"><path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/></svg>
+    List
+  </button>
+</div>
+
+<script>
+const DAYS = [
+  {
+    label:"Day 1",date:"Fri, Jun 5",
+    subtitle:"SLC → Mammoth Hot Springs",
+    stats:{drive:"6.5 hrs",hike:"—",wake:"1:00 PM"},
+    color:"#3b82f6",
+    stops:[
+      {time:"1:00 PM",name:"Salt Lake City Airport",desc:"Land at SLC, pick up SUV rental",lat:40.7899,lng:-111.9791,badges:["drive"]},
+      {time:"1:45 PM",name:"Depart SLC",desc:"I-15 North toward Idaho Falls",lat:40.85,lng:-111.92,badges:["drive"]},
+      {time:"3:45 PM",name:"Idaho Falls — Lunch + Groceries",desc:"Tandoori Oven (Indian vegetarian) or Jaker's. Pick up snacks & water at a grocery store for the next two days.",lat:43.4926,lng:-112.0408,badges:["eat","shop"]},
+      {time:"6:45 PM",name:"West Yellowstone",desc:"Pass through. Quick gas stop if needed.",lat:44.6621,lng:-111.1041,badges:["drive"]},
+      {time:"7:00 PM",name:"Yellowstone West Entrance",desc:"Enter park — $35/vehicle 7-day pass. Covers Days 2 & 3.",lat:44.6577,lng:-111.0940,badges:["drive"]},
+      {time:"7:00 PM",name:"Madison River Drive",desc:"Golden-hour drive through the park. Elk graze along the Madison River at dusk. Go slow and enjoy.",lat:44.6453,lng:-110.8622,badges:["see","photo"]},
+      {time:"8:15 PM",name:"Mammoth Hot Springs Hotel",desc:"Check in. Dinner at the Mammoth Hotel Dining Room — veggie burger, pasta, salads. Elk on the lawn outside!",lat:44.9631,lng:-110.6975,badges:["stay","eat"]}
+    ]
+  },
+  {
+    label:"Day 2",date:"Sat, Jun 6",
+    subtitle:"Yellowstone North Loop (Mammoth → West Yellowstone)",
+    stats:{drive:"4 hrs",hike:"5–7 mi",wake:"6:30 AM"},
+    color:"#10b981",
+    stops:[
+      {time:"6:30 AM",name:"Mammoth Hot Springs Terraces",desc:"Walk right out the hotel. Lower Terraces boardwalk (Palette Spring, Minerva, Jupiter) + Upper Terrace Loop drive. Elk on the lawn at dawn.",lat:44.9688,lng:-110.7107,badges:["hike","photo"]},
+      {time:"8:00 AM",name:"Drive to Lamar Valley",desc:"East through Tower Junction. 45 min scenic drive.",lat:44.9137,lng:-110.4170,badges:["drive"]},
+      {time:"8:45 AM",name:"Lamar Valley",desc:"\"Serengeti of North America\" — prime early-morning wildlife. Bison, pronghorn, wolves, grizzlies. Bring binoculars! 1–1.5 hrs cruising pullouts.",lat:44.9000,lng:-110.2200,badges:["see","photo"]},
+      {time:"10:30 AM",name:"Tower Fall",desc:"Quick 5-min walk to overlook of the 132-ft waterfall.",lat:44.8934,lng:-110.3873,badges:["see"]},
+      {time:"11:15 AM",name:"Grand Canyon of Yellowstone",desc:"Artist Point — THE postcard view of 308-ft Lower Falls. Lookout Point for a different angle. Brink of Lower Falls trail (0.6 mi) — stand at the top. Don't skip it!",lat:44.7198,lng:-110.4761,badges:["hike","photo"]},
+      {time:"12:45 PM",name:"Canyon Lodge Eatery — Lunch",desc:"Wraps, salads, rice bowls — good vegetarian options.",lat:44.7340,lng:-110.4937,badges:["eat"]},
+      {time:"1:30 PM",name:"Hayden Valley",desc:"Second-best wildlife area after Lamar — huge bison herds, grizzlies, sometimes wolves. Drive slowly along the Yellowstone River through open meadows. 30–40 min.",lat:44.6600,lng:-110.4500,badges:["see","photo"]},
+      {time:"2:15 PM",name:"Mud Volcano & Dragon's Mouth",desc:"Churning, hissing thermal area — bubbling mud cauldrons and a roaring steam cave. Totally different vibe from the geysers. Easy 0.6 mi boardwalk loop.",lat:44.6275,lng:-110.4350,badges:["see"]},
+      {time:"3:00 PM",name:"Drive back to Canyon → Norris",desc:"North to Canyon Junction, then west to Norris. ~45 min.",lat:44.7340,lng:-110.4937,badges:["drive"]},
+      {time:"3:45 PM",name:"Norris Geyser Basin",desc:"Yellowstone's oldest, hottest thermal area. Porcelain Basin loop (0.75 mi) + Back Basin trail (1.5 mi) — Steamboat Geyser, Echinus Geyser.",lat:44.7262,lng:-110.7031,badges:["hike","see"]},
+      {time:"5:30 PM",name:"West Yellowstone",desc:"Check into hotel. Pick up groceries at Market Place for tomorrow. Rest & freshen up.",lat:44.6621,lng:-111.1041,badges:["stay","shop"]},
+      {time:"7:00 PM",name:"Dinner in West Yellowstone",desc:"Madison Crossing Lounge, Serenity Bistro, or Firehole Bar & Grill.",lat:44.6605,lng:-111.0997,badges:["eat"]}
+    ]
+  },
+  {
+    label:"Day 3",date:"Sun, Jun 7",
+    subtitle:"Yellowstone Geysers → Grand Teton → Jackson",
+    stats:{drive:"3.5 hrs",hike:"5–6 mi",wake:"8:00 AM"},
+    color:"#f59e0b",
+    stops:[
+      {time:"8:00 AM",name:"Depart West Yellowstone",desc:"Enter park via West Entrance.",lat:44.6577,lng:-111.0940,badges:["drive"]},
+      {time:"8:30 AM",name:"Fountain Paint Pots",desc:"All 4 thermal types in one boardwalk — mud pots, fumaroles, hot springs, geysers. Easy 0.5 mi loop.",lat:44.5397,lng:-110.8098,badges:["see"]},
+      {time:"9:00 AM",name:"Grand Prismatic Spring",desc:"Yellowstone's most iconic feature — 370-ft rainbow hot spring. Midway Geyser Basin boardwalk.",lat:44.5251,lng:-110.8381,badges:["see","photo"]},
+      {time:"9:45 AM",name:"Fairy Falls Overlook",desc:"1.6 mi round trip hike to the elevated viewpoint looking DOWN on Grand Prismatic. The famous aerial view!",lat:44.5268,lng:-110.8472,badges:["hike","photo"]},
+      {time:"10:45 AM",name:"Old Faithful",desc:"Watch the eruption (~every 90 min). Then walk the Upper Geyser Basin boardwalk — Morning Glory Pool, Castle Geyser, Grand Geyser.",lat:44.4605,lng:-110.8281,badges:["see","hike"]},
+      {time:"12:45 PM",name:"Old Faithful Lodge — Lunch",desc:"Cafeteria or Bake Shop. Veggie chili, sandwiches, pizza on the deck.",lat:44.4590,lng:-110.8310,badges:["eat"]},
+      {time:"2:00 PM",name:"West Thumb Geyser Basin",desc:"Hot springs on the shore of Yellowstone Lake — thermal features draining into icy water. Easy boardwalk.",lat:44.4168,lng:-110.5727,badges:["see"]},
+      {time:"3:15 PM",name:"Colter Bay Village",desc:"Lakeshore Trail — flat, easy, lake views with Tetons behind. Or stretch legs at the general store.",lat:43.9033,lng:-110.6413,badges:["see"]},
+      {time:"3:50 PM",name:"Willow Flats Overlook",desc:"Quick pullover — often moose in the willows with Tetons behind.",lat:43.8600,lng:-110.6100,badges:["see","photo"]},
+      {time:"4:05 PM",name:"Oxbow Bend",desc:"Iconic photo spot — Snake River bend with Teton reflection. Pelicans, osprey, sometimes moose.",lat:43.8653,lng:-110.5556,badges:["photo"]},
+      {time:"4:30 PM",name:"Signal Mountain Summit",desc:"Drive to the top for 360° panoramic view of the Teton Range, Jackson Lake, and the valley.",lat:43.8325,lng:-110.5925,badges:["see","photo"]},
+      {time:"6:00 PM",name:"Jackson, WY",desc:"Check into hotel. Walk Town Square — elk antler arches, art galleries. Dinner: Thai Me Up, Cafe Genevieve, or Snake River Brewing.",lat:43.4799,lng:-110.7624,badges:["stay","eat"]}
+    ]
+  },
+  {
+    label:"Day 4",date:"Mon, Jun 8",
+    subtitle:"Grand Teton Full Day from Jackson",
+    stats:{drive:"1.5 hrs",hike:"5–6 mi",wake:"7:30 AM"},
+    color:"#8b5cf6",
+    stops:[
+      {time:"7:50 AM",name:"Schwabacher Landing",desc:"Morning Teton reflections in still water. One of the most photographed spots in the park. Beavers, moose possible.",lat:43.7153,lng:-110.6725,badges:["photo"]},
+      {time:"8:30 AM",name:"Mormon Row Historic District",desc:"Famous Moulton Barns with the Teton Range behind. Iconic Western Americana. Great group photos.",lat:43.6640,lng:-110.6668,badges:["see","photo"]},
+      {time:"9:15 AM",name:"Jenny Lake — Boat + Hike",desc:"Shuttle boat across ($20/adult). Hike to Hidden Falls (0.5 mi) and Inspiration Point (panoramic view, another 0.5 mi). ~2 hrs total.",lat:43.7533,lng:-110.7214,badges:["hike","see"]},
+      {time:"11:30 AM",name:"Teton Park Road Scenic Drive",desc:"Tetons loom directly above. Stop at Teton Glacier Turnout and Cathedral Group Turnout.",lat:43.7800,lng:-110.7300,badges:["drive","photo"]},
+      {time:"12:00 PM",name:"Signal Mountain Lodge — Lunch",desc:"Deck overlooking Jackson Lake with Teton views. Wraps, salads, flatbreads.",lat:43.8325,lng:-110.5925,badges:["eat"]},
+      {time:"1:30 PM",name:"Taggart Lake Trail",desc:"Beautiful moderate hike — 3 mi round trip. Wildflower meadows to a pristine glacial lake with Grand Teton behind.",lat:43.7066,lng:-110.7310,badges:["hike","photo"]},
+      {time:"3:30 PM",name:"Menor's Ferry Historic District",desc:"Preserved homestead and old general store near Moose.",lat:43.6532,lng:-110.7163,badges:["see"]},
+      {time:"4:00 PM",name:"Glacier View Turnout",desc:"Final panoramic Teton views in afternoon light. Last great photos.",lat:43.7900,lng:-110.7800,badges:["photo"]},
+      {time:"5:00 PM",name:"Jackson — Free Time & Dinner",desc:"Browse shops, galleries, western wear. Ice cream at Moo's. Farewell dinner: Glorietta Trattoria, Lotus Organic Cafe, or The Bird.",lat:43.4799,lng:-110.7624,badges:["eat","shop"]}
+    ]
+  },
+  {
+    label:"Day 5",date:"Tue, Jun 9",
+    subtitle:"Jackson Morning → SLC Airport",
+    stats:{drive:"4.5 hrs",hike:"—",wake:"7:30 AM"},
+    color:"#ef4444",
+    stops:[
+      {time:"8:00 AM",name:"Breakfast in Jackson",desc:"Persephone Bakery (French pastries) or The Bunnery (famous OSM bread, veggie breakfast).",lat:43.4804,lng:-110.7612,badges:["eat"]},
+      {time:"9:15 AM",name:"Jackson Town Square",desc:"Browse shops, art galleries, western wear. Pick up souvenirs.",lat:43.4799,lng:-110.7624,badges:["shop"]},
+      {time:"10:00 AM",name:"National Museum of Wildlife Art",desc:"Outstanding museum built into a hillside. Wildlife paintings & sculptures. Elk Refuge views. $18/adult.",lat:43.5006,lng:-110.7537,badges:["see"]},
+      {time:"11:00 AM",name:"Moo's Gourmet Ice Cream",desc:"One last stop for the road!",lat:43.4793,lng:-110.7616,badges:["eat"]},
+      {time:"11:30 AM",name:"Depart Jackson → SLC",desc:"US-89 South through scenic Hoback Canyon and Snake River Canyon. First 1.5 hrs are gorgeous — cameras ready!",lat:43.4799,lng:-110.7624,badges:["drive"]},
+      {time:"1:00 PM",name:"Alpine / Afton — Lunch Stop",desc:"Quick stretch + sandwiches or fast food. ~30 min.",lat:43.1644,lng:-111.0041,badges:["eat"]},
+      {time:"4:45 PM",name:"SLC Airport",desc:"Return rental car, shuttle to terminal. ~2+ hrs buffer before 8 PM flight.",lat:40.7899,lng:-111.9791,badges:["drive"]}
+    ]
+  }
+];
+
+const BADGE_LABELS={drive:"Drive",eat:"Eat",hike:"Hike",see:"Sight",stay:"Stay",photo:"Photo",shop:"Shop"};
+const isMobile=()=>window.innerWidth<=768;
+let currentView='split';
+
+const map=L.map('map',{zoomControl:true,attributionControl:!isMobile()}).setView([44.4,-110.6],8);
+L.tileLayer('https://tile.openstreetmap.de/{z}/{x}/{y}.png',{
+  attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+  maxZoom:18
+}).addTo(map);
+
+let markers=[];
+let routeLine=null;
+let activeDay=0;
+let highlightedIdx=-1;
+let tappedIdx=-1;
+
+function createMarkerIcon(num,color,highlighted){
+  const base=isMobile()?24:26;
+  const size=highlighted?(base+10):base;
+  const border=highlighted?3:2;
+  const shadow=highlighted
+    ?`box-shadow:0 0 0 6px ${color}44, 0 4px 12px rgba(0,0,0,.4);transform:scale(1.15)`
+    :`box-shadow:0 2px 6px rgba(0,0,0,.3)`;
+  return L.divIcon({
+    className:'',
+    iconSize:[size,size],
+    iconAnchor:[size/2,size/2],
+    popupAnchor:[0,-size/2-4],
+    html:`<div style="width:${size}px;height:${size}px;border-radius:50%;background:${color};
+      display:flex;align-items:center;justify-content:center;font-size:${highlighted?13:11}px;
+      font-weight:700;color:#fff;border:${border}px solid #fff;${shadow};
+      transition:all .3s ease;font-family:'Segoe UI',sans-serif">${num}</div>`
+  });
+}
+
+function renderDay(dayIdx){
+  activeDay=dayIdx;
+  highlightedIdx=-1;
+  tappedIdx=-1;
+  const day=DAYS[dayIdx];
+  document.documentElement.style.setProperty('--day-color',day.color);
+
+  document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',i===dayIdx));
+  document.querySelectorAll('.toggle-btn.active').forEach(b=>{
+    b.style.background=day.color;
+  });
+
+  const info=document.getElementById('dayInfo');
+  info.innerHTML=`
+    <div class="day-subtitle">${day.subtitle}</div>
+    <div class="day-stats">
+      <span class="stat"><strong>${day.stats.drive}</strong> driving</span>
+      <span class="stat"><strong>${day.stats.hike}</strong> hiking</span>
+      <span class="stat">Start: <strong>${day.stats.wake}</strong></span>
+    </div>`;
+
+  const stopsEl=document.getElementById('stops');
+  stopsEl.innerHTML='';
+  stopsEl.scrollTop=0;
+
+  day.stops.forEach((stop,i)=>{
+    const card=document.createElement('div');
+    card.className='stop-card';
+    card.dataset.idx=i;
+    const badgesHtml=stop.badges.map(b=>
+      `<span class="badge badge-${b}">${BADGE_LABELS[b]}</span>`).join('');
+    card.innerHTML=`
+      <div class="stop-num" style="background:${day.color}">${i+1}</div>
+      <div class="stop-time">${stop.time}</div>
+      <div class="stop-info">
+        <div class="stop-name">${stop.name}</div>
+        <div class="stop-desc">${stop.desc}</div>
+        <div class="stop-badges">${badgesHtml}</div>
+      </div>
+      ${i<day.stops.length-1?'<div class="connector"></div>':''}`;
+
+    if(isMobile()){
+      card.addEventListener('click',(e)=>{
+        e.stopPropagation();
+        if(tappedIdx===i){
+          unhighlightStop(i);
+          tappedIdx=-1;
+        } else {
+          if(tappedIdx>=0) unhighlightStop(tappedIdx);
+          highlightStop(i);
+          tappedIdx=i;
+          const s=day.stops[i];
+          map.flyTo([s.lat,s.lng],12,{duration:0.6});
+          if(currentView==='list') setView('split');
+        }
+      });
+    } else {
+      card.addEventListener('mouseenter',()=>highlightStop(i));
+      card.addEventListener('mouseleave',()=>unhighlightStop(i));
+      card.addEventListener('click',()=>{
+        const s=day.stops[i];
+        map.flyTo([s.lat,s.lng],13,{duration:0.8});
+      });
+    }
+    stopsEl.appendChild(card);
+  });
+
+  markers.forEach(m=>map.removeLayer(m));
+  markers=[];
+  if(routeLine) map.removeLayer(routeLine);
+
+  const coords=[];
+  day.stops.forEach((stop,i)=>{
+    const marker=L.marker([stop.lat,stop.lng],{
+      icon:createMarkerIcon(i+1,day.color,false),
+      zIndexOffset:100
+    }).addTo(map);
+    marker.bindPopup(`
+      <div class="popup-name">${stop.name}</div>
+      <div class="popup-time">${stop.time}</div>
+      <div class="popup-desc">${stop.desc}</div>`,
+      {closeButton:isMobile(),maxWidth:isMobile()?200:240,autoPan:true});
+    markers.push(marker);
+    coords.push([stop.lat,stop.lng]);
+
+    if(isMobile()){
+      marker.on('click',()=>{
+        if(tappedIdx>=0) unhighlightStop(tappedIdx);
+        highlightStop(i);
+        tappedIdx=i;
+        const card=document.querySelector(`.stop-card[data-idx="${i}"]`);
+        if(card) card.scrollIntoView({behavior:'smooth',block:'nearest'});
+      });
+    } else {
+      marker.on('mouseover',()=>{
+        if(highlightedIdx!==i) highlightStop(i);
+        const card=document.querySelector(`.stop-card[data-idx="${i}"]`);
+        if(card) card.scrollIntoView({behavior:'smooth',block:'nearest'});
+      });
+      marker.on('mouseout',()=>{
+        if(highlightedIdx===i) unhighlightStop(i);
+      });
+    }
+  });
+
+  routeLine=L.polyline(coords,{
+    color:day.color,weight:3,opacity:0.5,dashArray:'8 6',
+    smoothFactor:1.5
+  }).addTo(map);
+
+  const bounds=L.latLngBounds(coords);
+  map.fitBounds(bounds,{padding:isMobile()?[30,30]:[50,50],maxZoom:11});
+
+  setTimeout(()=>map.invalidateSize(),100);
+}
+
+function highlightStop(idx){
+  const day=DAYS[activeDay];
+  highlightedIdx=idx;
+  markers[idx].setIcon(createMarkerIcon(idx+1,day.color,true));
+  markers[idx].setZIndexOffset(1000);
+  markers[idx].openPopup();
+  document.querySelectorAll('.stop-card').forEach((c,i)=>c.classList.toggle('highlighted',i===idx));
+}
+
+function unhighlightStop(idx){
+  const day=DAYS[activeDay];
+  highlightedIdx=-1;
+  markers[idx].setIcon(createMarkerIcon(idx+1,day.color,false));
+  markers[idx].setZIndexOffset(100);
+  markers[idx].closePopup();
+  document.querySelectorAll('.stop-card').forEach(c=>c.classList.remove('highlighted'));
+}
+
+// Mobile view toggle
+function setView(view){
+  currentView=view;
+  document.body.classList.remove('view-map','view-list');
+  if(view==='map') document.body.classList.add('view-map');
+  else if(view==='list') document.body.classList.add('view-list');
+
+  document.querySelectorAll('.toggle-btn').forEach(b=>{
+    const isActive=b.dataset.view===view;
+    b.classList.toggle('active',isActive);
+    b.style.background=isActive?DAYS[activeDay].color:'transparent';
+    b.style.color=isActive?'#fff':'#94a3b8';
+  });
+
+  setTimeout(()=>map.invalidateSize(),150);
+}
+
+document.getElementById('btnSplit').addEventListener('click',()=>setView('split'));
+document.getElementById('btnMap').addEventListener('click',()=>setView('map'));
+document.getElementById('btnList').addEventListener('click',()=>setView('list'));
+
+// Dismiss highlight on mobile when tapping empty area
+document.getElementById('stops').addEventListener('click',(e)=>{
+  if(e.target.id==='stops'&&tappedIdx>=0){
+    unhighlightStop(tappedIdx);
+    tappedIdx=-1;
+  }
+});
+
+// Build tabs
+const tabsEl=document.getElementById('tabs');
+DAYS.forEach((day,i)=>{
+  const tab=document.createElement('div');
+  tab.className='tab';
+  tab.innerHTML=`<div style="font-size:13px">${day.label}</div><div class="tab-date" style="font-size:10px;margin-top:2px;color:#94a3b8">${day.date}</div>`;
+  tab.addEventListener('click',()=>renderDay(i));
+  tabsEl.appendChild(tab);
+});
+
+// Handle resize between mobile/desktop
+let wasMobile=isMobile();
+window.addEventListener('resize',()=>{
+  const nowMobile=isMobile();
+  if(wasMobile!==nowMobile){
+    wasMobile=nowMobile;
+    if(!nowMobile){
+      document.body.classList.remove('view-map','view-list');
+      currentView='split';
+    }
+    renderDay(activeDay);
+    setTimeout(()=>map.invalidateSize(),200);
+  } else {
+    map.invalidateSize();
+  }
+});
+
+renderDay(0);
+</script>
+</body>
+</html>
