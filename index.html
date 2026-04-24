@@ -51,6 +51,10 @@ body{font-family:'Segoe UI',-apple-system,BlinkMacSystemFont,sans-serif;height:1
 .badge-stay{background:#fce7f3;color:#db2777}
 .badge-photo{background:#ffedd5;color:#ea580c}
 .badge-shop{background:#f0fdf4;color:#16a34a}
+.badge-optional{background:#f1f5f9;color:#94a3b8;border:1px dashed #cbd5e1}
+.stop-card.optional{opacity:0.7}
+.stop-card.optional .stop-name{color:#64748b}
+.stop-card.optional:hover,.stop-card.optional.highlighted{opacity:1}
 #map{flex:1;height:100vh}
 .leaflet-popup-content-wrapper{border-radius:10px;box-shadow:0 4px 20px rgba(0,0,0,.15)}
 .leaflet-popup-content{margin:10px 14px;font-family:'Segoe UI',sans-serif}
@@ -181,7 +185,7 @@ const DAYS = [
       {time:"1:30 PM",name:"Hayden Valley",desc:"Second-best wildlife area after Lamar — huge bison herds, grizzlies, sometimes wolves. Drive slowly along the Yellowstone River through open meadows. 30–40 min.",lat:44.6600,lng:-110.4500,badges:["see","photo"]},
       {time:"2:15 PM",name:"Mud Volcano & Dragon's Mouth",desc:"Churning, hissing thermal area — bubbling mud cauldrons and a roaring steam cave. Totally different vibe from the geysers. Easy 0.6 mi boardwalk loop.",lat:44.6275,lng:-110.4350,badges:["see"]},
       {time:"3:00 PM",name:"Drive back to Canyon → Norris",desc:"North to Canyon Junction, then west to Norris. ~45 min.",lat:44.7340,lng:-110.4937,badges:["drive"]},
-      {time:"3:45 PM",name:"Norris Geyser Basin",desc:"Yellowstone's oldest, hottest thermal area. Porcelain Basin loop (0.75 mi) + Back Basin trail (1.5 mi) — Steamboat Geyser, Echinus Geyser.",lat:44.7262,lng:-110.7031,badges:["hike","see"]},
+      {time:"3:45 PM",name:"Norris Geyser Basin",desc:"Yellowstone's oldest, hottest thermal area. Porcelain Basin loop (0.75 mi) + Back Basin trail (1.5 mi) — Steamboat Geyser, Echinus Geyser. Flex stop — skip or shorten if running behind from Lamar/Hayden.",lat:44.7262,lng:-110.7031,badges:["hike","see","optional"],optional:true},
       {time:"5:30 PM",name:"West Yellowstone",desc:"Check into hotel. Pick up groceries at Market Place for tomorrow. Rest & freshen up.",lat:44.6621,lng:-111.1041,badges:["stay","shop"]},
       {time:"7:00 PM",name:"Dinner in West Yellowstone",desc:"Madison Crossing Lounge, Serenity Bistro, or Firehole Bar & Grill.",lat:44.6605,lng:-111.0997,badges:["eat"]}
     ]
@@ -198,8 +202,11 @@ const DAYS = [
       {time:"9:45 AM",name:"Fairy Falls Overlook",desc:"1.6 mi round trip hike to the elevated viewpoint looking DOWN on Grand Prismatic. The famous aerial view!",lat:44.5268,lng:-110.8472,badges:["hike","photo"]},
       {time:"10:45 AM",name:"Old Faithful",desc:"Watch the eruption (~every 90 min). Then walk the Upper Geyser Basin boardwalk — Morning Glory Pool, Castle Geyser, Grand Geyser.",lat:44.4605,lng:-110.8281,badges:["see","hike"]},
       {time:"12:45 PM",name:"Old Faithful Lodge — Lunch",desc:"Cafeteria or Bake Shop. Veggie chili, sandwiches, pizza on the deck.",lat:44.4590,lng:-110.8310,badges:["eat"]},
-      {time:"2:00 PM",name:"West Thumb Geyser Basin",desc:"Hot springs on the shore of Yellowstone Lake — thermal features draining into icy water. Easy boardwalk.",lat:44.4168,lng:-110.5727,badges:["see"]},
-      {time:"3:15 PM",name:"Colter Bay Village",desc:"Lakeshore Trail — flat, easy, lake views with Tetons behind. Or stretch legs at the general store.",lat:43.9033,lng:-110.6413,badges:["see"]},
+      {time:"1:30 PM",name:"Biscuit Basin",desc:"Tiny boardwalk loop with Sapphire Pool — one of the most vivid blue pools in the park. Right off the road. 15 min.",lat:44.4853,lng:-110.8530,badges:["see"],optional:true},
+      {time:"1:50 PM",name:"Kepler Cascades",desc:"Roadside waterfall viewpoint — zero walking required. Quick 5-min stop.",lat:44.4450,lng:-110.8100,badges:["see"],optional:true},
+      {time:"2:30 PM",name:"West Thumb Geyser Basin",desc:"Hot springs on the shore of Yellowstone Lake — thermal features draining into icy water. Easy boardwalk.",lat:44.4168,lng:-110.5727,badges:["see"]},
+      {time:"3:00 PM",name:"Lewis Falls",desc:"Easy roadside waterfall on the drive south toward Grand Teton. Quick 5-min pullover.",lat:44.3580,lng:-110.6340,badges:["see","photo"],optional:true},
+      {time:"3:30 PM",name:"Colter Bay Village",desc:"Lakeshore Trail — flat, easy, lake views with Tetons behind. Or stretch legs at the general store.",lat:43.9033,lng:-110.6413,badges:["see"]},
       {time:"3:50 PM",name:"Willow Flats Overlook",desc:"Quick pullover — often moose in the willows with Tetons behind.",lat:43.8600,lng:-110.6100,badges:["see","photo"]},
       {time:"4:05 PM",name:"Oxbow Bend",desc:"Iconic photo spot — Snake River bend with Teton reflection. Pelicans, osprey, sometimes moose.",lat:43.8653,lng:-110.5556,badges:["photo"]},
       {time:"4:30 PM",name:"Signal Mountain Summit",desc:"Drive to the top for 360° panoramic view of the Teton Range, Jackson Lake, and the valley.",lat:43.8325,lng:-110.5925,badges:["see","photo"]},
@@ -240,7 +247,7 @@ const DAYS = [
   }
 ];
 
-const BADGE_LABELS={drive:"Drive",eat:"Eat",hike:"Hike",see:"Sight",stay:"Stay",photo:"Photo",shop:"Shop"};
+const BADGE_LABELS={drive:"Drive",eat:"Eat",hike:"Hike",see:"Sight",stay:"Stay",photo:"Photo",shop:"Shop",optional:"Optional"};
 const isMobile=()=>window.innerWidth<=768;
 let currentView='split';
 
@@ -256,10 +263,12 @@ let activeDay=0;
 let highlightedIdx=-1;
 let tappedIdx=-1;
 
-function createMarkerIcon(num,color,highlighted){
+function createMarkerIcon(num,color,highlighted,optional){
   const base=isMobile()?24:26;
   const size=highlighted?(base+10):base;
   const border=highlighted?3:2;
+  const bg=optional&&!highlighted?color+'99':color;
+  const borderStyle=optional&&!highlighted?`border:${border}px dashed #fff`:`border:${border}px solid #fff`;
   const shadow=highlighted
     ?`box-shadow:0 0 0 6px ${color}44, 0 4px 12px rgba(0,0,0,.4);transform:scale(1.15)`
     :`box-shadow:0 2px 6px rgba(0,0,0,.3)`;
@@ -268,9 +277,9 @@ function createMarkerIcon(num,color,highlighted){
     iconSize:[size,size],
     iconAnchor:[size/2,size/2],
     popupAnchor:[0,-size/2-4],
-    html:`<div style="width:${size}px;height:${size}px;border-radius:50%;background:${color};
+    html:`<div style="width:${size}px;height:${size}px;border-radius:50%;background:${bg};
       display:flex;align-items:center;justify-content:center;font-size:${highlighted?13:11}px;
-      font-weight:700;color:#fff;border:${border}px solid #fff;${shadow};
+      font-weight:700;color:#fff;${borderStyle};${shadow};
       transition:all .3s ease;font-family:'Segoe UI',sans-serif">${num}</div>`
   });
 }
@@ -302,12 +311,13 @@ function renderDay(dayIdx){
 
   day.stops.forEach((stop,i)=>{
     const card=document.createElement('div');
-    card.className='stop-card';
+    card.className='stop-card'+(stop.optional?' optional':'');
     card.dataset.idx=i;
     const badgesHtml=stop.badges.map(b=>
       `<span class="badge badge-${b}">${BADGE_LABELS[b]}</span>`).join('');
+    const numBg=stop.optional?day.color+'99':day.color;
     card.innerHTML=`
-      <div class="stop-num" style="background:${day.color}">${i+1}</div>
+      <div class="stop-num" style="background:${numBg}">${i+1}</div>
       <div class="stop-time">${stop.time}</div>
       <div class="stop-info">
         <div class="stop-name">${stop.name}</div>
@@ -349,11 +359,11 @@ function renderDay(dayIdx){
   const coords=[];
   day.stops.forEach((stop,i)=>{
     const marker=L.marker([stop.lat,stop.lng],{
-      icon:createMarkerIcon(i+1,day.color,false),
-      zIndexOffset:100
+      icon:createMarkerIcon(i+1,day.color,false,stop.optional),
+      zIndexOffset:stop.optional?50:100
     }).addTo(map);
     marker.bindPopup(`
-      <div class="popup-name">${stop.name}</div>
+      <div class="popup-name">${stop.name}${stop.optional?' <span style="font-size:10px;color:#94a3b8;font-weight:400">(optional)</span>':''}</div>
       <div class="popup-time">${stop.time}</div>
       <div class="popup-desc">${stop.desc}</div>`,
       {closeButton:isMobile(),maxWidth:isMobile()?200:240,autoPan:true});
@@ -393,8 +403,9 @@ function renderDay(dayIdx){
 
 function highlightStop(idx){
   const day=DAYS[activeDay];
+  const stop=day.stops[idx];
   highlightedIdx=idx;
-  markers[idx].setIcon(createMarkerIcon(idx+1,day.color,true));
+  markers[idx].setIcon(createMarkerIcon(idx+1,day.color,true,stop.optional));
   markers[idx].setZIndexOffset(1000);
   markers[idx].openPopup();
   document.querySelectorAll('.stop-card').forEach((c,i)=>c.classList.toggle('highlighted',i===idx));
@@ -402,9 +413,10 @@ function highlightStop(idx){
 
 function unhighlightStop(idx){
   const day=DAYS[activeDay];
+  const stop=day.stops[idx];
   highlightedIdx=-1;
-  markers[idx].setIcon(createMarkerIcon(idx+1,day.color,false));
-  markers[idx].setZIndexOffset(100);
+  markers[idx].setIcon(createMarkerIcon(idx+1,day.color,false,stop.optional));
+  markers[idx].setZIndexOffset(stop.optional?50:100);
   markers[idx].closePopup();
   document.querySelectorAll('.stop-card').forEach(c=>c.classList.remove('highlighted'));
 }
