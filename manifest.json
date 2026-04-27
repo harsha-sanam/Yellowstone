@@ -1,0 +1,19 @@
+{
+  "name": "Yellowstone & Grand Teton Trip",
+  "short_name": "Yellowstone",
+  "description": "June 5-9 trip itinerary with offline maps & photos",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#1e293b",
+  "theme_color": "#1e293b",
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
