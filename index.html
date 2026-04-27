@@ -333,17 +333,18 @@ const DAYS = [
       {time:"2:15 PM",name:"Mud Volcano & Dragon's Mouth",desc:"Churning, hissing thermal area — bubbling mud cauldrons and a roaring steam cave. Totally different vibe from the geysers. Easy 0.6 mi boardwalk loop.",lat:44.6275,lng:-110.4350,badges:["see"],wiki:"Mud_Volcano_Area"},
       {time:"3:00 PM",name:"Drive back to Canyon → Norris",desc:"North to Canyon Junction, then west to Norris. ~45 min.",lat:44.7340,lng:-110.4937,badges:["drive"],wiki:null},
       {time:"3:45 PM",name:"Norris Geyser Basin",desc:"Yellowstone's oldest, hottest thermal area. Porcelain Basin loop (0.75 mi) + Back Basin trail (1.5 mi) — Steamboat Geyser, Echinus Geyser. Flex stop — skip or shorten if running behind from Lamar/Hayden.",lat:44.7262,lng:-110.7031,badges:["hike","see","optional"],optional:true,wiki:"Norris_Geyser_Basin"},
-      {time:"5:30 PM",name:"West Yellowstone",desc:"Check into hotel. Pick up groceries at Market Place for tomorrow. Rest & freshen up.",lat:44.6621,lng:-111.1041,badges:["stay","shop"],wiki:"West_Yellowstone,_Montana"},
-      {time:"7:00 PM",name:"Dinner in West Yellowstone",desc:"Madison Crossing Lounge, Serenity Bistro, or Firehole Bar & Grill.",lat:44.6605,lng:-111.0997,badges:["eat"],wiki:null}
+      {time:"5:30 PM",name:"West Yellowstone — Groceries & Dinner",desc:"Pick up groceries at Market Place for tomorrow's drive. Early dinner in town: Madison Crossing Lounge, Serenity Bistro, or Firehole Bar & Grill. (Eat here — Wander Camp doesn't serve dinner.)",lat:44.6621,lng:-111.1041,badges:["shop","eat"],wiki:"West_Yellowstone,_Montana"},
+      {time:"7:30 PM",name:"Wander Camp Yellowstone (Island Park, ID)",desc:"Drive ~30 min south on US-20 from West Yellowstone to Island Park, ID. Check into your glamping tent — stargazing, fire pit, very dark skies (Island Park has some of the darkest skies in the Lower 48). Verify exact location & directions with the camp.",lat:44.5500,lng:-111.3200,badges:["stay","drive"],wiki:"Island_Park,_Idaho"}
     ]
   },
   {
     label:"Day 3",date:"Sun, Jun 7",
-    subtitle:"Yellowstone Geysers → Grand Teton → Jackson",
-    stats:{drive:"3.5 hrs",hike:"5–6 mi",wake:"8:00 AM"},
+    subtitle:"Geysers → Grand Teton → Driggs, ID",
+    stats:{drive:"5 hrs",hike:"5–6 mi",wake:"7:30 AM"},
     color:"#f59e0b",
     stops:[
-      {time:"8:00 AM",name:"Depart West Yellowstone",desc:"Enter park via West Entrance.",lat:44.6577,lng:-111.0940,badges:["drive"],wiki:"Yellowstone_National_Park"},
+      {time:"7:30 AM",name:"Depart Wander Camp (Island Park)",desc:"Drive north on US-20 ~30 min back to West Yellowstone & the park's West Entrance.",lat:44.5500,lng:-111.3200,badges:["drive"],wiki:null},
+      {time:"8:15 AM",name:"Yellowstone West Entrance",desc:"Enter park (covered by Day 1's 7-day pass).",lat:44.6577,lng:-111.0940,badges:["drive"],wiki:"Yellowstone_National_Park"},
       {time:"8:30 AM",name:"Fountain Paint Pots",desc:"All 4 thermal types in one boardwalk — mud pots, fumaroles, hot springs, geysers. Easy 0.5 mi loop.",lat:44.5397,lng:-110.8098,badges:["see"],wiki:"Fountain_Paint_Pot"},
       {time:"9:00 AM",name:"Grand Prismatic Spring",desc:"Yellowstone's most iconic feature — 370-ft rainbow hot spring. Midway Geyser Basin boardwalk.",lat:44.5251,lng:-110.8381,badges:["must","see","photo"],must:true,wiki:"Grand_Prismatic_Spring"},
       {time:"9:45 AM",name:"Fairy Falls Overlook",desc:"1.6 mi round trip hike to the elevated viewpoint looking DOWN on Grand Prismatic. The famous aerial view!",lat:44.5268,lng:-110.8472,badges:["must","hike","photo"],must:true,wiki:"Fairy_Falls_(Wyoming)"},
@@ -357,15 +358,19 @@ const DAYS = [
       {time:"3:50 PM",name:"Willow Flats Overlook",desc:"Quick pullover — often moose in the willows with Tetons behind.",lat:43.8600,lng:-110.6100,badges:["see","photo"],wiki:"Grand_Teton_National_Park"},
       {time:"4:05 PM",name:"Oxbow Bend",desc:"Iconic photo spot — Snake River bend with Teton reflection. Pelicans, osprey, sometimes moose.",lat:43.8653,lng:-110.5556,badges:["must","photo"],must:true,wiki:"Oxbow_Bend"},
       {time:"4:30 PM",name:"Signal Mountain Summit",desc:"Drive to the top for 360° panoramic view of the Teton Range, Jackson Lake, and the valley.",lat:43.8325,lng:-110.5925,badges:["see","photo"],wiki:"Signal_Mountain_(Wyoming)"},
-      {time:"6:00 PM",name:"Jackson, WY",desc:"Check into hotel. Walk Town Square — elk antler arches, art galleries. Dinner: Thai Me Up, Cafe Genevieve, or Snake River Brewing.",lat:43.4799,lng:-110.7624,badges:["stay","eat"],wiki:"Jackson,_Wyoming"}
+      {time:"5:30 PM",name:"Teton Pass Scenic Drive",desc:"Drive south through Grand Teton & Jackson, then west on WY-22 over Teton Pass (8,431 ft) into Idaho. Stunning views of Jackson Hole as you climb. Steep grades — drive carefully.",lat:43.5009,lng:-110.9520,badges:["drive","photo"],wiki:"Teton_Pass"},
+      {time:"6:45 PM",name:"Broulim's Fresh Foods (Driggs)",desc:"Stop in Driggs for groceries — buy ingredients for 4 meals: tonight's dinner, Mon breakfast, Mon dinner, Tue breakfast. Pasta, eggs, bread, fruit, snacks all easy. Broulim's is the main grocery in Driggs.",lat:43.7233,lng:-111.1075,badges:["shop"],wiki:null},
+      {time:"7:15 PM",name:"Teton Valley Cabins (Driggs, ID)",desc:"Mountain Vista Drive, Driggs, ID. Cook a simple dinner at the cabin (you have a stove!). Quiet small town on the Idaho side of the Tetons — you see the dramatic WEST face of the range.",lat:43.7280,lng:-111.1100,badges:["stay","eat"],wiki:"Driggs,_Idaho"}
     ]
   },
   {
     label:"Day 4",date:"Mon, Jun 8",
-    subtitle:"Grand Teton Full Day from Jackson",
-    stats:{drive:"1.5 hrs",hike:"5–6 mi",wake:"7:30 AM"},
+    subtitle:"Grand Teton Day from Driggs (over Teton Pass)",
+    stats:{drive:"3.5 hrs",hike:"5–6 mi",wake:"6:00 AM"},
     color:"#8b5cf6",
     stops:[
+      {time:"6:00 AM",name:"Cooked breakfast at cabin",desc:"Quick breakfast at the cabin (eggs, toast, coffee). Saves time vs finding a breakfast spot. Pack lunch sandwiches if you want to skip the Signal Mountain Lodge stop.",lat:43.7280,lng:-111.1100,badges:["eat"],wiki:null},
+      {time:"6:30 AM",name:"Depart Driggs — Drive over Teton Pass",desc:"Drive south on ID-33 to Victor, then east on WY-22 over Teton Pass (8,431 ft) into Jackson Hole. ~1 hour. Morning light hits the Tetons beautifully as you crest the pass.",lat:43.7280,lng:-111.1100,badges:["drive","photo"],wiki:"Teton_Pass"},
       {time:"7:50 AM",name:"Schwabacher Landing",desc:"Morning Teton reflections in still water. One of the most photographed spots in the park. Beavers, moose possible.",lat:43.7153,lng:-110.6725,badges:["must","photo"],must:true,wiki:"Snake_River_(Adams)"},
       {time:"8:30 AM",name:"Mormon Row Historic District",desc:"Famous Moulton Barns with the Teton Range behind. Iconic Western Americana. Great group photos.",lat:43.6640,lng:-110.6668,badges:["must","see","photo"],must:true,wiki:"Mormon_Row_Historic_District"},
       {time:"9:15 AM",name:"Jenny Lake — Boat + Hike",desc:"Shuttle boat across ($20/adult). Hike to Hidden Falls (0.5 mi) and Inspiration Point (panoramic view, another 0.5 mi). ~2 hrs total.",lat:43.7533,lng:-110.7214,badges:["must","hike","see"],must:true,wiki:"Jenny_Lake"},
@@ -373,21 +378,23 @@ const DAYS = [
       {time:"12:00 PM",name:"Signal Mountain Lodge — Lunch",desc:"Deck overlooking Jackson Lake with Teton views. Wraps, salads, flatbreads.",lat:43.8325,lng:-110.5925,badges:["eat"],wiki:"Jackson_Lake"},
       {time:"1:30 PM",name:"Taggart Lake Trail",desc:"Beautiful moderate hike — 3 mi round trip. Wildflower meadows to a pristine glacial lake with Grand Teton behind.",lat:43.7066,lng:-110.7310,badges:["hike","photo"],wiki:"Taggart_Lake"},
       {time:"3:30 PM",name:"Menor's Ferry Historic District",desc:"Preserved homestead and old general store near Moose.",lat:43.6532,lng:-110.7163,badges:["see"],wiki:"Menor's_Ferry_Historic_District"},
-      {time:"4:00 PM",name:"Glacier View Turnout",desc:"Final panoramic Teton views in afternoon light. Last great photos.",lat:43.7900,lng:-110.7800,badges:["photo"],optional:true,wiki:"Teton_Range"},
-      {time:"5:00 PM",name:"Jackson — Free Time & Dinner",desc:"Browse shops, galleries, western wear. Ice cream at Moo's. Farewell dinner: Glorietta Trattoria, Lotus Organic Cafe, or The Bird.",lat:43.4799,lng:-110.7624,badges:["eat","shop"],wiki:"Jackson,_Wyoming"}
+      {time:"4:00 PM",name:"Glacier View Turnout",desc:"Final panoramic Teton views in afternoon light. Last great photos from the Jackson Hole side.",lat:43.7900,lng:-110.7800,badges:["photo"],optional:true,wiki:"Teton_Range"},
+      {time:"4:30 PM",name:"Quick Jackson stop",desc:"Brief stop in Jackson on the way back — Town Square photos, ice cream at Moo's. Don't linger long if you want to be back at cabin before dark for cooking. ~45 min.",lat:43.4799,lng:-110.7624,badges:["shop"],optional:true,wiki:"Jackson,_Wyoming"},
+      {time:"6:00 PM",name:"Drive back to Driggs over Teton Pass",desc:"~1 hour return. Drive in daylight if possible — Teton Pass is steep & winding. Dinner at the cabin: cook with the groceries from yesterday. Saves money + time, plus avoids dangerous nighttime pass driving.",lat:43.7280,lng:-111.1100,badges:["drive","stay","eat"],wiki:"Teton_Pass"}
     ]
   },
   {
     label:"Day 5",date:"Tue, Jun 9",
-    subtitle:"Jackson Morning → SLC Airport",
-    stats:{drive:"4.5 hrs",hike:"—",wake:"7:30 AM"},
+    subtitle:"Driggs → Jackson Morning → SLC Airport",
+    stats:{drive:"5.5 hrs",hike:"—",wake:"7:00 AM"},
     color:"#ef4444",
     stops:[
-      {time:"8:00 AM",name:"Breakfast in Jackson",desc:"Persephone Bakery (French pastries) or The Bunnery (famous OSM bread, veggie breakfast).",lat:43.4804,lng:-110.7612,badges:["eat"],wiki:"Jackson,_Wyoming"},
-      {time:"9:15 AM",name:"Jackson Town Square",desc:"Browse shops, art galleries, western wear. Pick up souvenirs.",lat:43.4799,lng:-110.7624,badges:["shop"],wiki:"Jackson_Hole"},
-      {time:"10:00 AM",name:"National Museum of Wildlife Art",desc:"Outstanding museum built into a hillside. Wildlife paintings & sculptures. Elk Refuge views. $18/adult.",lat:43.5006,lng:-110.7537,badges:["see"],wiki:"National_Museum_of_Wildlife_Art"},
-      {time:"11:00 AM",name:"Moo's Gourmet Ice Cream",desc:"One last stop for the road!",lat:43.4793,lng:-110.7616,badges:["eat"],optional:true,wiki:null},
-      {time:"11:30 AM",name:"Depart Jackson → SLC",desc:"US-89 South through scenic Hoback Canyon and Snake River Canyon. First 1.5 hrs are gorgeous — cameras ready!",lat:43.4799,lng:-110.7624,badges:["drive"],wiki:"Snake_River_Canyon_(Wyoming)"},
+      {time:"7:00 AM",name:"Cooked breakfast at cabin & pack",desc:"Last cooked breakfast at the cabin (use up remaining groceries). Pack up, load luggage, check out. Saves a Jackson restaurant stop.",lat:43.7280,lng:-111.1100,badges:["eat","stay"],wiki:null},
+      {time:"8:00 AM",name:"Drive over Teton Pass to Jackson",desc:"Last drive over Teton Pass — east on WY-22, ~1 hour. Beautiful morning light on the Tetons.",lat:43.5009,lng:-110.9520,badges:["drive","photo"],wiki:"Teton_Pass"},
+      {time:"9:00 AM",name:"National Museum of Wildlife Art",desc:"Outstanding museum built into a hillside. Wildlife paintings & sculptures. Elk Refuge views. $18/adult. Doors open at 9 AM — get here right at opening.",lat:43.5006,lng:-110.7537,badges:["see"],wiki:"National_Museum_of_Wildlife_Art"},
+      {time:"10:15 AM",name:"Jackson Town Square",desc:"Browse shops, art galleries, western wear. Pick up souvenirs. Elk antler arches photo.",lat:43.4799,lng:-110.7624,badges:["shop","photo"],wiki:"Jackson_Hole"},
+      {time:"11:15 AM",name:"Moo's Gourmet Ice Cream",desc:"One last treat for the road!",lat:43.4793,lng:-110.7616,badges:["eat"],optional:true,wiki:null},
+      {time:"11:45 AM",name:"Depart Jackson → SLC",desc:"US-89 South through scenic Hoback Canyon and Snake River Canyon. First 1.5 hrs are gorgeous — cameras ready!",lat:43.4799,lng:-110.7624,badges:["drive"],wiki:"Snake_River_Canyon_(Wyoming)"},
       {time:"1:00 PM",name:"Alpine / Afton — Lunch Stop",desc:"Quick stretch + sandwiches or fast food. ~30 min.",lat:43.1644,lng:-111.0041,badges:["eat"],wiki:"Alpine,_Wyoming"},
       {time:"4:45 PM",name:"SLC Airport",desc:"Return rental car, shuttle to terminal. ~2+ hrs buffer before 8 PM flight.",lat:40.7899,lng:-111.9791,badges:["drive"],wiki:"Salt_Lake_City_International_Airport"}
     ]
