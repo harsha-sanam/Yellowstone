@@ -723,7 +723,7 @@ if('serviceWorker' in navigator){
 // Check whether tiles have been pre-cached
 async function checkOfflineStatus(){
   if(!('caches' in window)) return;
-  const cache=await caches.open('yellowstone-v1-tiles');
+  const cache=await caches.open('yellowstone-v2-tiles');
   const keys=await cache.keys();
   if(keys.length<200){
     banner.classList.remove('hidden');
@@ -827,7 +827,7 @@ async function precacheTrip(){
   const imgUrls=[];
   for(const url of wikiUrls){
     try{
-      const cache=await caches.open('yellowstone-v1-wiki');
+      const cache=await caches.open('yellowstone-v2-wiki');
       const resp=await cache.match(url);
       if(resp){
         const data=await resp.json();
