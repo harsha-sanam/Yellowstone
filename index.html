@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>Yellowstone & Grand Teton — June 5–9, 2026</title>
+<title>Yellowstone Trip Itinerary — October 9–14, 2026</title>
 <link rel="manifest" href="./manifest.json">
 <meta name="theme-color" content="#1e293b">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -34,6 +34,8 @@ body{font-family:'Segoe UI',-apple-system,BlinkMacSystemFont,sans-serif;height:1
 .stat{font-size:11px;color:#94a3b8}
 .stat strong{color:#475569}
 .stops{flex:1;overflow-y:auto;padding:8px 12px;-webkit-overflow-scrolling:touch}
+.trip-note{margin:8px 0;padding:12px;border-radius:10px;background:#f1f5f9;color:#475569;font-size:12px;line-height:1.5}
+.trip-note p{margin-top:8px}
 .stops::-webkit-scrollbar{width:6px}
 .stops::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:3px}
 .stop-card{display:flex;padding:12px;border-radius:10px;margin-bottom:2px;cursor:pointer;
@@ -44,7 +46,7 @@ body{font-family:'Segoe UI',-apple-system,BlinkMacSystemFont,sans-serif;height:1
 .stop-num{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;
   font-size:11px;font-weight:700;color:#fff;margin-right:12px;margin-top:1px;flex-shrink:0;
   box-shadow:0 1px 3px rgba(0,0,0,.2)}
-.stop-time{font-size:11px;color:#94a3b8;font-weight:600;min-width:64px;padding-top:2px;margin-right:4px;
+.stop-time{font-size:11px;color:#94a3b8;font-weight:600;min-width:72px;padding-top:2px;margin-right:4px;
   font-variant-numeric:tabular-nums}
 .stop-info{flex:1;min-width:0}
 .stop-name{font-size:13.5px;font-weight:600;color:#1e293b;line-height:1.3}
@@ -235,8 +237,8 @@ body{font-family:'Segoe UI',-apple-system,BlinkMacSystemFont,sans-serif;height:1
 <div class="container">
   <div class="itinerary">
     <div class="header">
-      <h1>Yellowstone & Grand Teton</h1>
-      <p>June 5 – 9, 2026 &middot; 2 couples &middot; 1 SUV</p>
+      <h1>Yellowstone Trip Itinerary</h1>
+      <p>October 9 – 14, 2026 &middot; Sunnyvale round trip</p>
     </div>
     <div class="offline-banner hidden" id="offlineBanner">
       <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
@@ -302,101 +304,449 @@ body{font-family:'Segoe UI',-apple-system,BlinkMacSystemFont,sans-serif;height:1
 <script>
 const DAYS = [
   {
-    label:"Day 1",date:"Fri, Jun 5",
-    subtitle:"SLC → Mammoth Hot Springs",
-    stats:{drive:"6.5 hrs",hike:"—",wake:"1:00 PM"},
-    color:"#3b82f6",
-    stops:[
-      {time:"1:00 PM",name:"Salt Lake City Airport",desc:"Land at SLC, pick up SUV rental",lat:40.7899,lng:-111.9791,badges:["drive"],wiki:"Salt_Lake_City_International_Airport"},
-      {time:"1:45 PM",name:"Depart SLC",desc:"I-15 North toward Idaho Falls",lat:40.85,lng:-111.92,badges:["drive"],wiki:"Interstate_15"},
-      {time:"3:45 PM",name:"Idaho Falls — Lunch + Groceries",desc:"Tandoori Oven (Indian vegetarian) or Jaker's. Pick up snacks & water at a grocery store for the next two days.",lat:43.4926,lng:-112.0408,badges:["eat","shop"],wiki:"Idaho_Falls,_Idaho"},
-      {time:"6:45 PM",name:"West Yellowstone",desc:"Pass through. Quick gas stop if needed.",lat:44.6621,lng:-111.1041,badges:["drive"],wiki:"West_Yellowstone,_Montana"},
-      {time:"7:00 PM",name:"Yellowstone West Entrance",desc:"Enter park — $35/vehicle 7-day pass. Covers Days 2 & 3.",lat:44.6577,lng:-111.0940,badges:["drive"],wiki:"Yellowstone_National_Park"},
-      {time:"7:00 PM",name:"Madison River Drive",desc:"Golden-hour drive through the park. Elk graze along the Madison River at dusk. Go slow and enjoy.",lat:44.6453,lng:-110.8622,badges:["see","photo"],wiki:"Madison_River"},
-      {time:"8:15 PM",name:"Mammoth Hot Springs Hotel",desc:"Check in. Dinner at the Mammoth Hotel Dining Room — veggie burger, pasta, salads. Elk on the lawn outside!",lat:44.9631,lng:-110.6975,badges:["stay","eat"],wiki:"Mammoth_Hot_Springs_Hotel"}
+    "label": "Day 1",
+    "date": "Fri, Oct 9",
+    "subtitle": "Sunnyvale → Winnemucca",
+    "stats": {
+      "drive": "Not specified",
+      "distance": "~400 mi",
+      "wake": "1:00 PM"
+    },
+    "color": "#3b82f6",
+    "booking": "Days Inn by Wyndham, Winnemucca, NV · Check-in Oct 9, 3 PM; checkout Oct 10, 11 AM.",
+    "stops": [
+      {
+        "time": "1:00 PM",
+        "name": "Leave Sunnyvale",
+        "desc": "I-80 east via Sacramento. Fuel up first.",
+        "lat": 37.3688,
+        "lng": -122.0363,
+        "badges": [
+          "drive"
+        ],
+        "wiki": null
+      },
+      {
+        "time": "~4:00 PM",
+        "name": "Gold Run Rest Area",
+        "desc": "Near Colfax: restrooms and picnic tables.",
+        "lat": 39.18,
+        "lng": -120.855,
+        "badges": [
+          "drive"
+        ],
+        "wiki": null
+      },
+      {
+        "time": "~5:00 PM",
+        "name": "Donner Summit Rest Area",
+        "desc": "Check Caltrans QuickMap for chain controls.",
+        "lat": 39.339,
+        "lng": -120.343,
+        "badges": [
+          "drive"
+        ],
+        "wiki": null
+      },
+      {
+        "time": "~6:00 PM",
+        "name": "Reno / Sparks",
+        "desc": "Dinner and fuel. Last big choice before the long Nevada stretch.",
+        "lat": 39.535,
+        "lng": -119.753,
+        "badges": [
+          "eat",
+          "drive"
+        ],
+        "wiki": null
+      },
+      {
+        "time": "~7:30 PM",
+        "name": "Exit 83 or Cosgrave (Exit 158) rest areas",
+        "desc": "Choose a rest stop. Watch for livestock after dark. Pin shows the approximate Cosgrave area.",
+        "lat": 40.743,
+        "lng": -117.975,
+        "badges": [
+          "drive"
+        ],
+        "wiki": null
+      },
+      {
+        "time": "~9:00 PM",
+        "name": "Days Inn Winnemucca",
+        "desc": "Call ahead to confirm late check-in.",
+        "lat": 40.973,
+        "lng": -117.7357,
+        "badges": [
+          "stay"
+        ],
+        "wiki": null
+      }
     ]
   },
   {
-    label:"Day 2",date:"Sat, Jun 6",
-    subtitle:"Yellowstone North Loop (Mammoth → West Yellowstone)",
-    stats:{drive:"4 hrs",hike:"5–7 mi",wake:"6:30 AM"},
-    color:"#10b981",
-    stops:[
-      {time:"6:30 AM",name:"Mammoth Hot Springs Terraces",desc:"Walk right out the hotel. Lower Terraces boardwalk (Palette Spring, Minerva, Jupiter) + Upper Terrace Loop drive. Elk on the lawn at dawn.",lat:44.9688,lng:-110.7107,badges:["must","hike","photo"],must:true,wiki:"Mammoth_Hot_Springs"},
-      {time:"8:00 AM",name:"Drive to Lamar Valley",desc:"East through Tower Junction. 45 min scenic drive.",lat:44.9137,lng:-110.4170,badges:["drive"],wiki:"Lamar_Valley"},
-      {time:"8:45 AM",name:"Lamar Valley",desc:"\"Serengeti of North America\" — prime early-morning wildlife. Bison, pronghorn, wolves, grizzlies. Bring binoculars! 1–1.5 hrs cruising pullouts.",lat:44.9000,lng:-110.2200,badges:["must","see","photo"],must:true,wiki:"Lamar_Valley"},
-      {time:"10:30 AM",name:"Tower Fall",desc:"Quick 5-min walk to overlook of the 132-ft waterfall.",lat:44.8934,lng:-110.3873,badges:["see"],wiki:"Tower_Fall"},
-      {time:"11:10 AM",name:"Upper Falls Viewpoint",desc:"Quick stop on South Rim Drive — fenced overlook 100 ft from the parking lot, right at the top of the 109-ft Upper Falls. 10 min.",lat:44.7158,lng:-110.4980,badges:["see","photo"],wiki:"Upper_Yellowstone_Falls"},
-      {time:"11:25 AM",name:"Grand Canyon of Yellowstone (Lower Falls)",desc:"Artist Point (South Rim) — THE postcard view of 308-ft Lower Falls. Lookout Point (North Rim) for a different angle. Brink of Lower Falls trail (0.6 mi) — stand at the top of the falls. Don't skip it!",lat:44.7198,lng:-110.4761,badges:["must","hike","photo"],must:true,wiki:"Grand_Canyon_of_the_Yellowstone"},
-      {time:"12:45 PM",name:"Canyon Lodge Eatery — Lunch",desc:"Wraps, salads, rice bowls — good vegetarian options.",lat:44.7340,lng:-110.4937,badges:["eat"],wiki:"Canyon_Village_Historic_District"},
-      {time:"1:30 PM",name:"Hayden Valley",desc:"Second-best wildlife area after Lamar — huge bison herds, grizzlies, sometimes wolves. Drive slowly along the Yellowstone River through open meadows. 30–40 min.",lat:44.6600,lng:-110.4500,badges:["see","photo"],wiki:"Hayden_Valley"},
-      {time:"2:15 PM",name:"Mud Volcano & Dragon's Mouth",desc:"Churning, hissing thermal area — bubbling mud cauldrons and a roaring steam cave. Totally different vibe from the geysers. Easy 0.6 mi boardwalk loop.",lat:44.6275,lng:-110.4350,badges:["see"],wiki:"Mud_Volcano_Area"},
-      {time:"3:00 PM",name:"Drive back to Canyon → Norris",desc:"North to Canyon Junction, then west to Norris. ~45 min.",lat:44.7340,lng:-110.4937,badges:["drive"],wiki:null},
-      {time:"3:45 PM",name:"Norris Geyser Basin",desc:"Yellowstone's oldest, hottest thermal area. Porcelain Basin loop (0.75 mi) + Back Basin trail (1.5 mi) — Steamboat Geyser, Echinus Geyser. Flex stop — skip or shorten if running behind from Lamar/Hayden.",lat:44.7262,lng:-110.7031,badges:["hike","see","optional"],optional:true,wiki:"Norris_Geyser_Basin"},
-      {time:"5:30 PM",name:"West Yellowstone — Groceries & Dinner",desc:"Pick up groceries at Market Place for tomorrow's drive. Early dinner in town: Madison Crossing Lounge, Serenity Bistro, or Firehole Bar & Grill. (Eat here — Wander Camp doesn't serve dinner.)",lat:44.6621,lng:-111.1041,badges:["shop","eat"],wiki:"West_Yellowstone,_Montana"},
-      {time:"7:30 PM",name:"Wander Camp Yellowstone (Island Park, ID)",desc:"Drive ~30 min south on US-20 from West Yellowstone to Island Park, ID. Check into your glamping tent — stargazing, fire pit, very dark skies (Island Park has some of the darkest skies in the Lower 48). Verify exact location & directions with the camp.",lat:44.5500,lng:-111.3200,badges:["stay","drive"],wiki:"Island_Park,_Idaho"}
+    "label": "Day 2",
+    "date": "Sat, Oct 10",
+    "subtitle": "Winnemucca → Idaho Falls",
+    "stats": {
+      "drive": "7.5–8 hrs",
+      "distance": "~480 mi",
+      "wake": "11:00 AM"
+    },
+    "color": "#10b981",
+    "booking": "Clarion Inn Idaho Falls Riverfront, ID · Check-in Oct 10, 3 PM; checkout Oct 11, 11 AM.",
+    "stops": [
+      {
+        "time": "11:00 AM",
+        "name": "Check out in Winnemucca",
+        "desc": "Fuel up. I-80 east to Wells.",
+        "lat": 40.973,
+        "lng": -117.7357,
+        "badges": [
+          "drive"
+        ],
+        "wiki": null
+      },
+      {
+        "time": "Midday",
+        "name": "Valmy (Exit 216) or Beowawe (MM 258) rest areas",
+        "desc": "Short break. Pin shows the approximate Valmy area.",
+        "lat": 40.791,
+        "lng": -117.136,
+        "badges": [
+          "drive"
+        ],
+        "wiki": null
+      },
+      {
+        "time": "~1:30 PM",
+        "name": "Wells, NV",
+        "desc": "Lunch and fuel. Turn north on US-93 toward Twin Falls.",
+        "lat": 41.111,
+        "lng": -114.965,
+        "badges": [
+          "eat",
+          "drive"
+        ],
+        "wiki": null
+      },
+      {
+        "time": "~3:45 PM",
+        "name": "Buzz Langdon Visitor Center (Perrine Bridge)",
+        "desc": "Twin Falls: canyon views and restrooms. You gain an hour crossing into Mountain Time, per the PDF.",
+        "lat": 42.598,
+        "lng": -114.454,
+        "badges": [
+          "see",
+          "photo"
+        ],
+        "wiki": "Perrine_Bridge"
+      },
+      {
+        "time": "~5:15 PM",
+        "name": "Coldwater Hill or Massacre Rocks rest areas",
+        "desc": "On I-86 near American Falls. Pin shows the approximate Massacre Rocks area.",
+        "lat": 42.548,
+        "lng": -112.965,
+        "badges": [
+          "drive"
+        ],
+        "wiki": null
+      },
+      {
+        "time": "~7:00 PM",
+        "name": "Clarion Inn Idaho Falls Riverfront",
+        "desc": "Overnight in Idaho Falls.",
+        "lat": 43.493,
+        "lng": -112.041,
+        "badges": [
+          "stay"
+        ],
+        "wiki": null
+      }
     ]
   },
   {
-    label:"Day 3",date:"Sun, Jun 7",
-    subtitle:"Geysers → Grand Teton → Driggs, ID",
-    stats:{drive:"5 hrs",hike:"5–6 mi",wake:"7:30 AM"},
-    color:"#f59e0b",
-    stops:[
-      {time:"7:30 AM",name:"Depart Wander Camp (Island Park)",desc:"Drive north on US-20 ~30 min back to West Yellowstone & the park's West Entrance.",lat:44.5500,lng:-111.3200,badges:["drive"],wiki:null},
-      {time:"8:15 AM",name:"Yellowstone West Entrance",desc:"Enter park (covered by Day 1's 7-day pass).",lat:44.6577,lng:-111.0940,badges:["drive"],wiki:"Yellowstone_National_Park"},
-      {time:"8:30 AM",name:"Fountain Paint Pots",desc:"All 4 thermal types in one boardwalk — mud pots, fumaroles, hot springs, geysers. Easy 0.5 mi loop.",lat:44.5397,lng:-110.8098,badges:["see"],wiki:"Fountain_Paint_Pot"},
-      {time:"9:00 AM",name:"Grand Prismatic Spring",desc:"Yellowstone's most iconic feature — 370-ft rainbow hot spring. Midway Geyser Basin boardwalk.",lat:44.5251,lng:-110.8381,badges:["must","see","photo"],must:true,wiki:"Grand_Prismatic_Spring"},
-      {time:"9:45 AM",name:"Fairy Falls Overlook",desc:"1.6 mi round trip hike to the elevated viewpoint looking DOWN on Grand Prismatic. The famous aerial view!",lat:44.5268,lng:-110.8472,badges:["must","hike","photo"],must:true,wiki:"Fairy_Falls_(Wyoming)"},
-      {time:"10:45 AM",name:"Old Faithful",desc:"Watch the eruption (~every 90 min). Then walk the Upper Geyser Basin boardwalk — Morning Glory Pool, Castle Geyser, Grand Geyser.",lat:44.4605,lng:-110.8281,badges:["must","see","hike"],must:true,wiki:"Old_Faithful"},
-      {time:"12:45 PM",name:"Old Faithful Lodge — Lunch",desc:"Cafeteria or Bake Shop. Veggie chili, sandwiches, pizza on the deck.",lat:44.4590,lng:-110.8310,badges:["eat"],wiki:"Old_Faithful_Inn"},
-      {time:"1:30 PM",name:"Biscuit Basin",desc:"Tiny boardwalk loop with Sapphire Pool — one of the most vivid blue pools in the park. Right off the road. 15 min.",lat:44.4853,lng:-110.8530,badges:["see"],optional:true,wiki:"Biscuit_Basin"},
-      {time:"1:50 PM",name:"Kepler Cascades",desc:"Roadside waterfall viewpoint — zero walking required. Quick 5-min stop.",lat:44.4450,lng:-110.8100,badges:["see"],optional:true,wiki:"Kepler_Cascades"},
-      {time:"2:30 PM",name:"West Thumb Geyser Basin",desc:"Hot springs on the shore of Yellowstone Lake — thermal features draining into icy water. Easy boardwalk.",lat:44.4168,lng:-110.5727,badges:["see"],wiki:"West_Thumb_Geyser_Basin"},
-      {time:"3:00 PM",name:"Lewis Falls",desc:"Easy roadside waterfall on the drive south toward Grand Teton. Quick 5-min pullover.",lat:44.3580,lng:-110.6340,badges:["see","photo"],optional:true,wiki:"Lewis_Falls_(Wyoming)"},
-      {time:"3:30 PM",name:"Colter Bay Village",desc:"Lakeshore Trail — flat, easy, lake views with Tetons behind. Or stretch legs at the general store.",lat:43.9033,lng:-110.6413,badges:["see"],wiki:"Colter_Bay_Village"},
-      {time:"3:50 PM",name:"Willow Flats Overlook",desc:"Quick pullover — often moose in the willows with Tetons behind.",lat:43.8600,lng:-110.6100,badges:["see","photo"],wiki:"Grand_Teton_National_Park"},
-      {time:"4:05 PM",name:"Oxbow Bend",desc:"Iconic photo spot — Snake River bend with Teton reflection. Pelicans, osprey, sometimes moose.",lat:43.8653,lng:-110.5556,badges:["must","photo"],must:true,wiki:"Oxbow_Bend"},
-      {time:"4:30 PM",name:"Signal Mountain Summit",desc:"Drive to the top for 360° panoramic view of the Teton Range, Jackson Lake, and the valley.",lat:43.8325,lng:-110.5925,badges:["see","photo"],wiki:"Signal_Mountain_(Wyoming)"},
-      {time:"5:30 PM",name:"Teton Pass Scenic Drive",desc:"Drive south through Grand Teton & Jackson, then west on WY-22 over Teton Pass (8,431 ft) into Idaho. Stunning views of Jackson Hole as you climb. Steep grades — drive carefully.",lat:43.5009,lng:-110.9520,badges:["drive","photo"],wiki:"Teton_Pass"},
-      {time:"6:45 PM",name:"Broulim's Fresh Foods (Driggs)",desc:"Stop in Driggs for groceries — buy ingredients for 4 meals: tonight's dinner, Mon breakfast, Mon dinner, Tue breakfast. Pasta, eggs, bread, fruit, snacks all easy. Broulim's is the main grocery in Driggs.",lat:43.7233,lng:-111.1075,badges:["shop"],wiki:null},
-      {time:"7:15 PM",name:"Teton Valley Cabins (Driggs, ID)",desc:"Mountain Vista Drive, Driggs, ID. Cook a simple dinner at the cabin (you have a stove!). Quiet small town on the Idaho side of the Tetons — you see the dramatic WEST face of the range.",lat:43.7280,lng:-111.1100,badges:["stay","eat"],wiki:"Driggs,_Idaho"}
+    "label": "Day 3",
+    "date": "Sun, Oct 11",
+    "subtitle": "Idaho Falls → Mammoth via Yellowstone",
+    "stats": {
+      "drive": "~2 hrs to West Entrance",
+      "distance": "Not specified",
+      "wake": "7:00 AM"
+    },
+    "color": "#f59e0b",
+    "booking": "Mammoth Hot Springs & Cabins, inside Yellowstone · Check-in Oct 11, 4 PM; checkout Oct 12, 11 AM.",
+    "stops": [
+      {
+        "time": "7:00 AM",
+        "name": "Leave Idaho Falls",
+        "desc": "US-20. Get breakfast and fuel first.",
+        "lat": 43.493,
+        "lng": -112.041,
+        "badges": [
+          "drive"
+        ],
+        "wiki": null
+      },
+      {
+        "time": "~10:15 AM",
+        "name": "Norris Geyser Basin",
+        "desc": "Boardwalks and restrooms.",
+        "lat": 44.727,
+        "lng": -110.703,
+        "badges": [
+          "see",
+          "hike"
+        ],
+        "wiki": "Norris_Geyser_Basin"
+      },
+      {
+        "time": "~12:00 PM",
+        "name": "Canyon Village & Grand Canyon of the Yellowstone",
+        "desc": "Lunch, then the lookouts and waterfalls.",
+        "lat": 44.72,
+        "lng": -110.476,
+        "badges": [
+          "eat",
+          "see",
+          "photo"
+        ],
+        "wiki": "Grand_Canyon_of_the_Yellowstone"
+      },
+      {
+        "time": "~3:00 PM",
+        "name": "Dunraven Pass & Tower Fall",
+        "desc": "Do this today; the PDF lists Dunraven Pass as closing Oct 12. Recheck NPS road status before travel.",
+        "lat": 44.8934,
+        "lng": -110.3873,
+        "badges": [
+          "drive",
+          "see"
+        ],
+        "wiki": "Tower_Fall"
+      },
+      {
+        "time": "~4:15 PM",
+        "name": "Mammoth Hot Springs & Cabins",
+        "desc": "Elk often roam the village; keep 25 yards back (100 yards from bears and wolves).",
+        "lat": 44.976,
+        "lng": -110.701,
+        "badges": [
+          "stay"
+        ],
+        "wiki": "Mammoth_Hot_Springs_Hotel"
+      }
     ]
   },
   {
-    label:"Day 4",date:"Mon, Jun 8",
-    subtitle:"Grand Teton Day from Driggs (over Teton Pass)",
-    stats:{drive:"3.5 hrs",hike:"5–6 mi",wake:"6:00 AM"},
-    color:"#8b5cf6",
-    stops:[
-      {time:"6:00 AM",name:"Cooked breakfast at cabin",desc:"Quick breakfast at the cabin (eggs, toast, coffee). Saves time vs finding a breakfast spot. Pack lunch sandwiches if you want to skip the Signal Mountain Lodge stop.",lat:43.7280,lng:-111.1100,badges:["eat"],wiki:null},
-      {time:"6:30 AM",name:"Depart Driggs — Drive over Teton Pass",desc:"Drive south on ID-33 to Victor, then east on WY-22 over Teton Pass (8,431 ft) into Jackson Hole. ~1 hour. Morning light hits the Tetons beautifully as you crest the pass.",lat:43.7280,lng:-111.1100,badges:["drive","photo"],wiki:"Teton_Pass"},
-      {time:"7:50 AM",name:"Schwabacher Landing",desc:"Morning Teton reflections in still water. One of the most photographed spots in the park. Beavers, moose possible.",lat:43.7153,lng:-110.6725,badges:["must","photo"],must:true,wiki:"Snake_River_(Adams)"},
-      {time:"8:30 AM",name:"Mormon Row Historic District",desc:"Famous Moulton Barns with the Teton Range behind. Iconic Western Americana. Great group photos.",lat:43.6640,lng:-110.6668,badges:["must","see","photo"],must:true,wiki:"Mormon_Row_Historic_District"},
-      {time:"9:15 AM",name:"Jenny Lake — Boat + Hike",desc:"Shuttle boat across ($20/adult). Hike to Hidden Falls (0.5 mi) and Inspiration Point (panoramic view, another 0.5 mi). ~2 hrs total.",lat:43.7533,lng:-110.7214,badges:["must","hike","see"],must:true,wiki:"Jenny_Lake"},
-      {time:"11:30 AM",name:"Teton Park Road Scenic Drive",desc:"Tetons loom directly above. Stop at Teton Glacier Turnout and Cathedral Group Turnout.",lat:43.7800,lng:-110.7300,badges:["drive","photo"],wiki:"Teton_Range"},
-      {time:"12:00 PM",name:"Signal Mountain Lodge — Lunch",desc:"Deck overlooking Jackson Lake with Teton views. Wraps, salads, flatbreads.",lat:43.8325,lng:-110.5925,badges:["eat"],wiki:"Jackson_Lake"},
-      {time:"1:30 PM",name:"Taggart Lake Trail",desc:"Beautiful moderate hike — 3 mi round trip. Wildflower meadows to a pristine glacial lake with Grand Teton behind.",lat:43.7066,lng:-110.7310,badges:["hike","photo"],wiki:"Taggart_Lake"},
-      {time:"3:30 PM",name:"Menor's Ferry Historic District",desc:"Preserved homestead and old general store near Moose.",lat:43.6532,lng:-110.7163,badges:["see"],wiki:"Menor's_Ferry_Historic_District"},
-      {time:"4:00 PM",name:"Glacier View Turnout",desc:"Final panoramic Teton views in afternoon light. Last great photos from the Jackson Hole side.",lat:43.7900,lng:-110.7800,badges:["photo"],optional:true,wiki:"Teton_Range"},
-      {time:"4:30 PM",name:"Quick Jackson stop",desc:"Brief stop in Jackson on the way back — Town Square photos, ice cream at Moo's. Don't linger long if you want to be back at cabin before dark for cooking. ~45 min.",lat:43.4799,lng:-110.7624,badges:["shop"],optional:true,wiki:"Jackson,_Wyoming"},
-      {time:"6:00 PM",name:"Drive back to Driggs over Teton Pass",desc:"~1 hour return. Drive in daylight if possible — Teton Pass is steep & winding. Dinner at the cabin: cook with the groceries from yesterday. Saves money + time, plus avoids dangerous nighttime pass driving.",lat:43.7280,lng:-111.1100,badges:["drive","stay","eat"],wiki:"Teton_Pass"}
+    "label": "Day 4",
+    "date": "Mon, Oct 12",
+    "subtitle": "Mammoth → West Yellowstone",
+    "stats": {
+      "drive": "1.5–2 hrs",
+      "distance": "Not specified",
+      "wake": "Morning"
+    },
+    "color": "#8b5cf6",
+    "booking": "Dude & Roundup, West Yellowstone, MT · Check-in Oct 12, 3 PM; checkout Oct 13, 11 AM.",
+    "stops": [
+      {
+        "time": "Morning",
+        "name": "Mammoth terraces walk",
+        "desc": "Easy boardwalk loop before 11 AM checkout.",
+        "lat": 44.9688,
+        "lng": -110.7107,
+        "badges": [
+          "hike",
+          "see"
+        ],
+        "wiki": "Mammoth_Hot_Springs"
+      },
+      {
+        "time": "~12:30 PM",
+        "name": "Madison & Firehole area",
+        "desc": "Scenic drive and restroom stop.",
+        "lat": 44.6453,
+        "lng": -110.8622,
+        "badges": [
+          "drive",
+          "see"
+        ],
+        "wiki": "Firehole_River"
+      },
+      {
+        "time": "~1:30 PM",
+        "name": "Old Faithful & Grand Prismatic",
+        "desc": "Visit Old Faithful and Midway Geyser Basin. The PDF lists Old Faithful Inn lodging as closing at 11 AM today; recheck current NPS information. Pin shows Old Faithful.",
+        "lat": 44.4605,
+        "lng": -110.8281,
+        "badges": [
+          "see",
+          "photo"
+        ],
+        "wiki": "Old_Faithful"
+      },
+      {
+        "time": "~4:00 PM",
+        "name": "Dude & Roundup, West Yellowstone",
+        "desc": "Overnight stay. See the PDF lodging note below.",
+        "lat": 44.662,
+        "lng": -111.104,
+        "badges": [
+          "stay"
+        ],
+        "wiki": null
+      }
     ]
   },
   {
-    label:"Day 5",date:"Tue, Jun 9",
-    subtitle:"Driggs → Jackson Morning → SLC Airport",
-    stats:{drive:"5.5 hrs",hike:"—",wake:"7:00 AM"},
-    color:"#ef4444",
-    stops:[
-      {time:"7:00 AM",name:"Cooked breakfast at cabin & pack",desc:"Last cooked breakfast at the cabin (use up remaining groceries). Pack up, load luggage, check out. Saves a Jackson restaurant stop.",lat:43.7280,lng:-111.1100,badges:["eat","stay"],wiki:null},
-      {time:"8:00 AM",name:"Drive over Teton Pass to Jackson",desc:"Last drive over Teton Pass — east on WY-22, ~1 hour. Beautiful morning light on the Tetons.",lat:43.5009,lng:-110.9520,badges:["drive","photo"],wiki:"Teton_Pass"},
-      {time:"9:00 AM",name:"National Museum of Wildlife Art",desc:"Outstanding museum built into a hillside. Wildlife paintings & sculptures. Elk Refuge views. $18/adult. Doors open at 9 AM — get here right at opening.",lat:43.5006,lng:-110.7537,badges:["see"],wiki:"National_Museum_of_Wildlife_Art"},
-      {time:"10:15 AM",name:"Jackson Town Square",desc:"Browse shops, art galleries, western wear. Pick up souvenirs. Elk antler arches photo.",lat:43.4799,lng:-110.7624,badges:["shop","photo"],wiki:"Jackson_Hole"},
-      {time:"11:15 AM",name:"Moo's Gourmet Ice Cream",desc:"One last treat for the road!",lat:43.4793,lng:-110.7616,badges:["eat"],optional:true,wiki:null},
-      {time:"11:45 AM",name:"Depart Jackson → SLC",desc:"US-89 South through scenic Hoback Canyon and Snake River Canyon. First 1.5 hrs are gorgeous — cameras ready!",lat:43.4799,lng:-110.7624,badges:["drive"],wiki:"Snake_River_Canyon_(Wyoming)"},
-      {time:"1:00 PM",name:"Alpine / Afton — Lunch Stop",desc:"Quick stretch + sandwiches or fast food. ~30 min.",lat:43.1644,lng:-111.0041,badges:["eat"],wiki:"Alpine,_Wyoming"},
-      {time:"4:45 PM",name:"SLC Airport",desc:"Return rental car, shuttle to terminal. ~2+ hrs buffer before 8 PM flight.",lat:40.7899,lng:-111.9791,badges:["drive"],wiki:"Salt_Lake_City_International_Airport"}
+    "label": "Day 5",
+    "date": "Tue, Oct 13",
+    "subtitle": "Head home → Elko overnight",
+    "stats": {
+      "drive": "~9 hrs",
+      "distance": "Not specified",
+      "wake": "11:00 AM"
+    },
+    "color": "#ef4444",
+    "booking": "Not booked yet · Elko, NV suggested. Book a hotel before you leave.",
+    "stops": [
+      {
+        "time": "11:00 AM",
+        "name": "Check out of West Yellowstone",
+        "desc": "Drive via Idaho Falls, Twin Falls and Wells.",
+        "lat": 44.662,
+        "lng": -111.104,
+        "badges": [
+          "drive"
+        ],
+        "wiki": null
+      },
+      {
+        "time": "On the way",
+        "name": "Massacre Rocks",
+        "desc": "Same rest stops as Oct 10, in reverse.",
+        "lat": 42.548,
+        "lng": -112.965,
+        "badges": [
+          "drive"
+        ],
+        "wiki": null
+      },
+      {
+        "time": "On the way",
+        "name": "Perrine Bridge visitor center",
+        "desc": "Rest stop in Twin Falls.",
+        "lat": 42.598,
+        "lng": -114.454,
+        "badges": [
+          "see"
+        ],
+        "wiki": "Perrine_Bridge"
+      },
+      {
+        "time": "On the way",
+        "name": "Wells",
+        "desc": "Rest stop on the return route.",
+        "lat": 41.111,
+        "lng": -114.965,
+        "badges": [
+          "drive"
+        ],
+        "wiki": null
+      },
+      {
+        "time": "Evening",
+        "name": "Elko overnight halt — not booked",
+        "desc": "Elko is the suggested overnight stop.",
+        "lat": 40.833,
+        "lng": -115.763,
+        "badges": [
+          "stay"
+        ],
+        "wiki": null
+      }
+    ]
+  },
+  {
+    "label": "Day 6",
+    "date": "Wed, Oct 14",
+    "subtitle": "Elko → Sunnyvale",
+    "stats": {
+      "drive": "8.5–9 hrs",
+      "distance": "Not specified",
+      "wake": "Morning"
+    },
+    "color": "#0891b2",
+    "booking": "Home to Sunnyvale.",
+    "stops": [
+      {
+        "time": "Morning",
+        "name": "Leave Elko for Sunnyvale",
+        "desc": "Via I-80 and Reno.",
+        "lat": 40.833,
+        "lng": -115.763,
+        "badges": [
+          "drive"
+        ],
+        "wiki": null
+      },
+      {
+        "time": "On the way",
+        "name": "Cosgrave Rest Area",
+        "desc": "Same rest stops as Oct 9, in reverse.",
+        "lat": 40.743,
+        "lng": -117.975,
+        "badges": [
+          "drive"
+        ],
+        "wiki": null
+      },
+      {
+        "time": "On the way",
+        "name": "Reno",
+        "desc": "Continue west on I-80.",
+        "lat": 39.535,
+        "lng": -119.753,
+        "badges": [
+          "drive"
+        ],
+        "wiki": null
+      },
+      {
+        "time": "On the way",
+        "name": "Donner Summit Rest Area",
+        "desc": "Rest stop; check Caltrans QuickMap.",
+        "lat": 39.339,
+        "lng": -120.343,
+        "badges": [
+          "drive"
+        ],
+        "wiki": null
+      },
+      {
+        "time": "On the way",
+        "name": "Gold Run Rest Area",
+        "desc": "Rest stop on the drive home.",
+        "lat": 39.18,
+        "lng": -120.855,
+        "badges": [
+          "drive"
+        ],
+        "wiki": null
+      },
+      {
+        "time": "Arrival",
+        "name": "Sunnyvale",
+        "desc": "Return home. Arrival time is not specified in the PDF.",
+        "lat": 37.3688,
+        "lng": -122.0363,
+        "badges": [
+          "drive"
+        ],
+        "wiki": null
+      }
     ]
   }
 ];
@@ -454,13 +804,18 @@ function renderDay(dayIdx){
     <div class="day-subtitle">${day.subtitle}</div>
     <div class="day-stats">
       <span class="stat"><strong>${day.stats.drive}</strong> driving</span>
-      <span class="stat"><strong>${day.stats.hike}</strong> hiking</span>
+      <span class="stat"><strong>${day.stats.distance}</strong> distance</span>
       <span class="stat">Start: <strong>${day.stats.wake}</strong></span>
     </div>`;
 
   const stopsEl=document.getElementById('stops');
   stopsEl.innerHTML='';
   stopsEl.scrollTop=0;
+
+  const booking=document.createElement('div');
+  booking.className='trip-note';
+  booking.textContent='Stay: '+day.booking;
+  stopsEl.appendChild(booking);
 
   day.stops.forEach((stop,i)=>{
     const card=document.createElement('div');
@@ -488,6 +843,10 @@ function renderDay(dayIdx){
     }
     stopsEl.appendChild(card);
   });
+  const notes=document.createElement('div');
+  notes.className='trip-note';
+  notes.innerHTML=`<strong>Notes from the itinerary PDF</strong><p>Drive and arrival times are estimates; recheck them on the day. Map pins are approximate.</p><p>Check NDOT 511 for Nevada rest areas, Caltrans QuickMap for Donner Summit, and NPS for park roads and visitor center hours.</p><p>Dude &amp; Roundup: the PDF reports poor reviews (2/5 on Tripadvisor, 1.5 on Yelp). One reviewer suggested asking for a Dude-side room. If refundable, the PDF suggests Alpine Motel or Evergreen Motel (both listed as 4.8 on Yelp). These ratings are from the PDF.</p><p>Oct 13 night: book a hotel in Elko, NV before you leave.</p>`;
+  stopsEl.appendChild(notes);
 
   markers.forEach(m=>map.removeLayer(m));
   markers=[];
@@ -749,10 +1108,10 @@ function lat2tile(lat,zoom){
   return Math.floor((1-Math.log(Math.tan(lat*Math.PI/180)+1/Math.cos(lat*Math.PI/180))/Math.PI)/2*Math.pow(2,zoom));
 }
 
-// Trip bounds — covers SLC, Yellowstone, Grand Teton, Jackson
+// Trip bounds — Sunnyvale, I-80 / Idaho drive corridor, Yellowstone
 const TRIP_BOUNDS = {
-  // Wider bounds (SLC drive corridor) — overview zoom only
-  wide: { north: 45.0, south: 40.5, east: -110.0, west: -112.5, minZoom: 7, maxZoom: 9 },
+  // Wider bounds (round-trip drive corridor) — overview zoom only
+  wide: { north: 45.0, south: 37.0, east: -110.0, west: -122.5, minZoom: 7, maxZoom: 9 },
   // Park area — detail zoom
   park: { north: 45.0, south: 43.4, east: -110.0, west: -111.3, minZoom: 10, maxZoom: 12 }
 };
