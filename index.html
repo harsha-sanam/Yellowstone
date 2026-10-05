@@ -30,7 +30,7 @@ body{font-family:'Segoe UI',-apple-system,BlinkMacSystemFont,sans-serif;height:1
 .tab.active{color:var(--day-color);border-bottom-color:var(--day-color);background:#fff}
 .day-subtitle{padding:16px 20px 8px;font-size:13px;color:#64748b;font-weight:500;
   border-bottom:1px solid #f1f5f9;background:#fafbfc}
-.day-stats{display:flex;gap:16px;padding:8px 20px 12px;background:#fafbfc;border-bottom:1px solid #e2e8f0}
+.day-stats{display:flex;flex-wrap:wrap;gap:16px;padding:8px 20px 12px;background:#fafbfc;border-bottom:1px solid #e2e8f0}
 .stat{font-size:11px;color:#94a3b8}
 .stat strong{color:#475569}
 .stops{flex:1;overflow-y:auto;padding:8px 12px;-webkit-overflow-scrolling:touch}
@@ -433,7 +433,7 @@ const DAYS = [
       {
         "time": "~3:45 PM",
         "name": "Buzz Langdon Visitor Center (Perrine Bridge)",
-        "desc": "Twin Falls: canyon views and restrooms. You gain an hour crossing into Mountain Time, per the PDF.",
+        "desc": "Twin Falls: canyon views and restrooms. Entering Mountain Time moves the clock one hour forward; allow for that in your arrival time. All stop times are approximate local times.",
         "lat": 42.598,
         "lng": -114.454,
         "badges": [
@@ -454,9 +454,9 @@ const DAYS = [
         "wiki": null
       },
       {
-        "time": "~7:00 PM",
+        "time": "Evening",
         "name": "Clarion Inn Idaho Falls Riverfront",
-        "desc": "Overnight in Idaho Falls.",
+        "desc": "Overnight in Idaho Falls. Allow for breaks and the one-hour clock change; confirm a late arrival with the hotel if needed.",
         "lat": 43.493,
         "lng": -112.041,
         "badges": [
@@ -464,7 +464,8 @@ const DAYS = [
         ],
         "wiki": null
       }
-    ]
+    ],
+    "notes": "Consider leaving Winnemucca earlier than 11 AM for more arrival buffer. The 7.5–8 hour estimate excludes breaks and the clock change."
   },
   {
     "label": "Day 3",
@@ -492,7 +493,7 @@ const DAYS = [
       {
         "time": "~10:15 AM",
         "name": "Norris Geyser Basin",
-        "desc": "Boardwalks and restrooms.",
+        "desc": "Walk the geyser-basin boardwalks if conditions permit. The Norris museum and store are scheduled to have closed October 3; bring food and water.",
         "lat": 44.727,
         "lng": -110.703,
         "badges": [
@@ -502,34 +503,74 @@ const DAYS = [
         "wiki": "Norris_Geyser_Basin"
       },
       {
-        "time": "~12:00 PM",
-        "name": "Canyon Village & Grand Canyon of the Yellowstone",
-        "desc": "Lunch, then the lookouts and waterfalls.",
-        "lat": 44.72,
-        "lng": -110.476,
+        "time": "~12:15 PM",
+        "name": "Mud Volcano & Dragon’s Mouth",
+        "desc": "Drive south from Canyon through Hayden Valley to the Mud Volcano area. Visit the bubbling mud features and Dragon’s Mouth steam cave on the boardwalk, then return north to Canyon Village. Allow about 30–45 minutes here, plus the drive both ways; skip icy sections.",
+        "lat": 44.6275,
+        "lng": -110.435,
         "badges": [
-          "eat",
+          "must",
+          "see",
+          "hike"
+        ],
+        "wiki": "Mud_Volcano_Area",
+        "must": true
+      },
+      {
+        "time": "~1:30 PM",
+        "name": "Canyon Village — Lunch",
+        "desc": "Lunch before visiting Upper and Lower Falls. Canyon Lodge Eatery is listed as operating during this visit; carry a packed lunch as a backup.",
+        "lat": 44.734,
+        "lng": -110.4937,
+        "badges": [
+          "eat"
+        ],
+        "wiki": "Canyon_Village_Historic_District"
+      },
+      {
+        "time": "~2:15 PM",
+        "name": "Upper Falls Viewpoint",
+        "desc": "Stop at the Upper Falls Viewpoint on South Rim Drive for a short walk to views of the waterfall. Allow about 20–30 minutes; use accessible, open paths and skip icy sections.",
+        "lat": 44.7158,
+        "lng": -110.498,
+        "badges": [
           "see",
           "photo"
         ],
-        "wiki": "Grand_Canyon_of_the_Yellowstone"
+        "wiki": "Upper_Yellowstone_Falls"
       },
       {
         "time": "~3:00 PM",
+        "name": "Lower Falls — Artist Point",
+        "desc": "Continue along South Rim Drive to Artist Point for the classic view of Lower Falls and the Grand Canyon of the Yellowstone. Allow about 45 minutes, weather and trail conditions permitting.",
+        "lat": 44.7198,
+        "lng": -110.4761,
+        "badges": [
+          "must",
+          "see",
+          "photo"
+        ],
+        "wiki": "Grand_Canyon_of_the_Yellowstone",
+        "must": true
+      },
+      {
+        "time": "~4:15 PM",
         "name": "Dunraven Pass & Tower Fall",
-        "desc": "Do this today; the PDF lists Dunraven Pass as closing Oct 12. Recheck NPS road status before travel.",
+        "desc": "Optional, weather permitting. Dunraven Pass is projected to close October 12 and may close earlier for snow. If closed, skip this stop and drive Canyon → Norris → Mammoth. Tower Fall store is scheduled to have closed October 4.",
         "lat": 44.8934,
         "lng": -110.3873,
         "badges": [
           "drive",
-          "see"
+          "see",
+          "optional"
         ],
-        "wiki": "Tower_Fall"
+        "wiki": "Tower_Fall",
+        "optional": true
       },
       {
-        "time": "~4:15 PM",
+        "time": "~6:00 PM",
         "name": "Mammoth Hot Springs & Cabins",
-        "desc": "Elk often roam the village; keep 25 yards back (100 yards from bears and wolves).",
+        "desc": "Check in after 4 PM; allow extra time for sightseeing, weather, and up to 15-minute Gardner River bridge delays near Mammoth. Keep 25 yards from elk and 100 yards from bears and wolves.",
         "lat": 44.976,
         "lng": -110.701,
         "badges": [
@@ -537,14 +578,15 @@ const DAYS = [
         ],
         "wiki": "Mammoth_Hot_Springs_Hotel"
       }
-    ]
+    ],
+    "notes": "Check the live NPS road map before leaving Idaho Falls. The route via Dunraven is conditional; Canyon → Norris → Mammoth is the fallback if those roads remain open. Arrival times are planning estimates, not reservations. Upper and Lower Falls are separate stops after lunch; skip Tower Fall if the falls visits run long. Mud Volcano adds a southbound detour through Hayden Valley and a return to Canyon. Prioritize the geyser basin and falls; skip optional Tower Fall if time or weather would delay the drive to Mammoth."
   },
   {
     "label": "Day 4",
     "date": "Mon, Oct 12",
     "subtitle": "Mammoth → West Yellowstone",
     "stats": {
-      "drive": "1.5–2 hrs",
+      "drive": "Allow ~3–4 hrs",
       "distance": "Not specified",
       "wake": "Morning"
     },
@@ -558,10 +600,12 @@ const DAYS = [
         "lat": 44.9688,
         "lng": -110.7107,
         "badges": [
+          "must",
           "hike",
           "see"
         ],
-        "wiki": "Mammoth_Hot_Springs"
+        "wiki": "Mammoth_Hot_Springs",
+        "must": true
       },
       {
         "time": "~12:30 PM",
@@ -577,20 +621,50 @@ const DAYS = [
       },
       {
         "time": "~1:30 PM",
-        "name": "Old Faithful & Grand Prismatic",
-        "desc": "Visit Old Faithful and Midway Geyser Basin. The PDF lists Old Faithful Inn lodging as closing at 11 AM today; recheck current NPS information. Pin shows Old Faithful.",
-        "lat": 44.4605,
-        "lng": -110.8281,
+        "name": "Grand Prismatic — Midway Geyser Basin",
+        "desc": "Visit the boardwalk before continuing south to Old Faithful. Allow about an hour; skip icy sections. This stop comes first when driving south from Madison.",
+        "lat": 44.5251,
+        "lng": -110.8381,
         "badges": [
+          "must",
           "see",
           "photo"
         ],
-        "wiki": "Old_Faithful"
+        "wiki": "Grand_Prismatic_Spring",
+        "must": true
       },
       {
-        "time": "~4:00 PM",
+        "time": "~2:30 PM",
+        "name": "Fairy Falls Overlook — Grand Prismatic",
+        "desc": "From the Fairy Falls trailhead, hike to the elevated overlook of Grand Prismatic Spring. Allow about 1 hour for the walk and photos. This stop visits the overlook, not Fairy Falls itself. Check trail conditions and skip the climb if icy; map pin is approximate.",
+        "lat": 44.519,
+        "lng": -110.844,
+        "badges": [
+          "must",
+          "hike",
+          "photo"
+        ],
+        "wiki": "Grand_Prismatic_Spring",
+        "must": true
+      },
+      {
+        "time": "~3:45 PM",
+        "name": "Old Faithful & Upper Geyser Basin",
+        "desc": "Check the eruption prediction on arrival and allow time to wait and explore. Geyser access depends on road and weather conditions. The lodge operator lists Old Faithful Inn closing October 12 at 11 AM, while NPS lists October 18 for lodging; confirm directly before relying on Inn services. Snow Lodge Geyser Grill is listed as operating during this visit.",
+        "lat": 44.4605,
+        "lng": -110.8281,
+        "badges": [
+          "must",
+          "see",
+          "photo"
+        ],
+        "wiki": "Old_Faithful",
+        "must": true
+      },
+      {
+        "time": "~6:30–7 PM",
         "name": "Dude & Roundup, West Yellowstone",
-        "desc": "Overnight stay. See the PDF lodging note below.",
+        "desc": "Return through Madison to West Yellowstone and check in. Arrival may be later depending on the eruption wait, weather, and traffic. See the lodging note below.",
         "lat": 44.662,
         "lng": -111.104,
         "badges": [
@@ -598,7 +672,8 @@ const DAYS = [
         ],
         "wiki": null
       }
-    ]
+    ],
+    "notes": "The driving allowance covers Mammoth → Madison → Midway → Old Faithful → West Yellowstone and excludes sightseeing. Published road dates extend through October 31 for this route, but snow can temporarily close roads. Keep time for the return drive. Fairy Falls Overlook adds about an hour. Keep the hike flexible for weather and leave Old Faithful with time for the return drive; hotel arrival may be later than planned."
   },
   {
     "label": "Day 5",
@@ -607,21 +682,35 @@ const DAYS = [
     "stats": {
       "drive": "~9 hrs",
       "distance": "Not specified",
-      "wake": "11:00 AM"
+      "wake": "7:30 AM"
     },
     "color": "#ef4444",
     "booking": "Not booked yet · Elko, NV suggested. Book a hotel before you leave.",
     "stops": [
       {
-        "time": "11:00 AM",
+        "time": "7:30 AM",
         "name": "Check out of West Yellowstone",
-        "desc": "Drive via Idaho Falls, Twin Falls and Wells.",
+        "desc": "Check out early, get breakfast and fuel, then drive south on US-20 toward Rexburg for Yellowstone Bear World before continuing via Idaho Falls, Twin Falls and Wells.",
         "lat": 44.662,
         "lng": -111.104,
         "badges": [
           "drive"
         ],
         "wiki": null
+      },
+      {
+        "time": "~9:15 AM",
+        "name": "Yellowstone Bear World",
+        "desc": "Drive-through wildlife attraction near Rexburg, Idaho, at 6010 South 4300 West. Published 2026 hours are 9 AM–5 PM daily through October 18. Allow about 1.5–2 hours, then continue south toward Idaho Falls. Confirm hours before travel. Map pin is approximate.",
+        "lat": 43.749,
+        "lng": -111.867,
+        "badges": [
+          "must",
+          "see",
+          "photo"
+        ],
+        "wiki": null,
+        "must": true
       },
       {
         "time": "On the way",
@@ -667,7 +756,8 @@ const DAYS = [
         ],
         "wiki": null
       }
-    ]
+    ],
+    "notes": "Returning to Pacific Time moves the clock one hour back. Book the Elko hotel before departure and allow for meal and rest stops. Leave West Yellowstone early for the morning Bear World visit and aim to resume the drive by about 11:15 AM Mountain Time. The visit adds 1.5–2 hours to the travel day; Elko arrival remains an evening estimate. Hours source: https://yellowstonebearworld.com/about-ybw/rates-and-details/"
   },
   {
     "label": "Day 6",
@@ -816,6 +906,12 @@ function renderDay(dayIdx){
   booking.className='trip-note';
   booking.textContent='Stay: '+day.booking;
   stopsEl.appendChild(booking);
+  if(day.notes){
+    const dayNote=document.createElement('div');
+    dayNote.className='trip-note';
+    dayNote.textContent=day.notes;
+    stopsEl.appendChild(dayNote);
+  }
 
   day.stops.forEach((stop,i)=>{
     const card=document.createElement('div');
@@ -845,7 +941,7 @@ function renderDay(dayIdx){
   });
   const notes=document.createElement('div');
   notes.className='trip-note';
-  notes.innerHTML=`<strong>Notes from the itinerary PDF</strong><p>Drive and arrival times are estimates; recheck them on the day. Map pins are approximate.</p><p>Check NDOT 511 for Nevada rest areas, Caltrans QuickMap for Donner Summit, and NPS for park roads and visitor center hours.</p><p>Dude &amp; Roundup: the PDF reports poor reviews (2/5 on Tripadvisor, 1.5 on Yelp). One reviewer suggested asking for a Dude-side room. If refundable, the PDF suggests Alpine Motel or Evergreen Motel (both listed as 4.8 on Yelp). These ratings are from the PDF.</p><p>Oct 13 night: book a hotel in Elko, NV before you leave.</p>`;
+  notes.innerHTML=`<strong>October travel notes</strong><p>Times are approximate local times. Drive estimates exclude sightseeing and breaks. Map pins are approximate. Pack warm layers, shoes with traction, food, and water; snow and ice can affect roads and boardwalks.</p><p>2026 projected road dates: Dunraven Pass closes October 12; West Entrance–Madison, Madison–Old Faithful, Madison–Norris, Norris–Mammoth, and Norris–Canyon remain open through October 31, weather permitting. Check live conditions every morning.</p><p><a href="https://www.nps.gov/yell/planyourvisit/parkroads.htm" target="_blank" rel="noopener">NPS road status &amp; construction</a> · <a href="https://www.nps.gov/yell/planyourvisit/operating-dates.htm" target="_blank" rel="noopener">NPS facility dates</a> · <a href="https://www.yellowstonenationalparklodges.com/stay/plan/opening-and-closing-dates-2/" target="_blank" rel="noopener">Lodge operator dates</a></p><p>Check NDOT 511, Idaho 511, and Caltrans QuickMap for conditions along the drive, including Donner Summit chain controls.</p><p>Dude &amp; Roundup: the PDF reports poor reviews (2/5 on Tripadvisor, 1.5 on Yelp). One reviewer suggested asking for a Dude-side room. If refundable, the PDF suggests Alpine Motel or Evergreen Motel (both listed as 4.8 on Yelp). These ratings are from the PDF.</p><p>Oct 13 night: book a hotel in Elko, NV before you leave.</p>`;
   stopsEl.appendChild(notes);
 
   markers.forEach(m=>map.removeLayer(m));
