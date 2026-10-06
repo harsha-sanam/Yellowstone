@@ -1,6 +1,6 @@
 // Service Worker — caches app shell, map tiles, Wikipedia API, Wikipedia images
 const CACHE_VERSION = 'yellowstone-v2';
-const SHELL_CACHE = `${CACHE_VERSION}-shell`;
+const SHELL_CACHE = `${CACHE_VERSION}-shell-refresh-v1`;
 const TILES_CACHE = `${CACHE_VERSION}-tiles`;
 const WIKI_CACHE = `${CACHE_VERSION}-wiki`;
 const IMG_CACHE = `${CACHE_VERSION}-images`;
@@ -28,14 +28,19 @@ self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then(keys =>
       Promise.all(keys
-        .filter(k => !k.startsWith(CACHE_VERSION))
+        .filter(k => k.startsWith('yellowstone-') && ![SHELL_CACHE, TILES_CACHE, WIKI_CACHE, IMG_CACHE].includes(k))
         .map(k => caches.delete(k))
       )
-    ).then(() => self.clients.claim())
+    ).then(() => self.clients.claim()).then(async () => {
+      // Reload even older app pages that do not yet listen for update messages.
+      const windows = await self.clients.matchAll({ type: 'window' });
+      await Promise.allSettled(windows.map(client => client.navigate(client.url)));
+    })
   );
 });
 
 self.addEventListener('fetch', (event) => {
+  if (event.request.method !== 'GET') return;
   const url = event.request.url;
 
   // Map tiles — cache-first, then network
@@ -62,12 +67,46 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // App shell (HTML, manifest, icon) — cache-first with network update
-  if (url.includes(self.location.origin)) {
-    event.respondWith(cacheFirst(event.request, SHELL_CACHE));
+  // App shell — use fresh content online and the cached copy offline
+  if (new URL(url).origin === self.location.origin) {
+    event.respondWith(networkFirst(event.request));
     return;
   }
 });
+
+async function networkFirst(request) {
+  const cache = await caches.open(SHELL_CACHE);
+  try {
+    const response = await fetch(request, { cache: 'no-store' });
+    if (response.ok) {
+      await cache.put(request, response.clone()).catch(() => {});
+      return response;
+    }
+    return (await cache.match(request)) || response;
+  } catch (error) {
+    return (await cache.match(request)) ||
+      (request.mode === 'navigate' && await cache.match('./index.html')) ||
+      new Response('Offline', { status: 503 });
+  }
+}
+
+// Detect HTML changes even when a deployment does not change sw.js.
+async function checkPageUpdate(client) {
+  if (!client || new URL(client.url).origin !== self.location.origin) return;
+  const cache = await caches.open(SHELL_CACHE);
+  const previous = await cache.match(client.url);
+  if (!previous) return;
+  try {
+    const response = await fetch(client.url, { cache: 'no-store' });
+    if (!response.ok || !(response.headers.get('content-type') || '').includes('text/html')) return;
+    const updated = await response.clone().text();
+    if (updated === await previous.text()) return;
+    await cache.put(client.url, response);
+    client.postMessage({ type: 'APP_UPDATED' });
+  } catch (error) {
+    // Offline: keep the current page and cached trip data.
+  }
+}
 
 async function cacheFirst(request, cacheName) {
   const cache = await caches.open(cacheName);
@@ -93,6 +132,10 @@ async function cacheFirst(request, cacheName) {
 
 // Listen for pre-cache message from the page
 self.addEventListener('message', (event) => {
+  if (event.data && event.data.type === 'CHECK_APP_UPDATE') {
+    event.waitUntil(checkPageUpdate(event.source));
+    return;
+  }
   if (event.data && event.data.type === 'CACHE_URLS') {
     const urls = event.data.urls;
     const cacheName = event.data.cache || TILES_CACHE;

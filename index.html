@@ -1308,15 +1308,27 @@ renderDay(0);
 // ============================================================
 const banner=document.getElementById('offlineBanner');
 
-// Register service worker
+// Check for fresh deployments while open and when returning to the app.
 if('serviceWorker' in navigator){
-  navigator.serviceWorker.register('./sw.js').then(reg=>{
-    console.log('SW registered');
-    // Show download banner if not already cached
-    checkOfflineStatus();
-  }).catch(err=>{
-    console.warn('SW registration failed:',err);
+  let reloadingForUpdate=false;
+  navigator.serviceWorker.addEventListener('message',event=>{
+    if(event.data?.type==='APP_UPDATED'&&!reloadingForUpdate){
+      reloadingForUpdate=true;
+      window.location.reload();
+    }
   });
+  navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'}).then(reg=>{
+    const checkForUpdate=()=>{
+      if(!navigator.onLine||document.visibilityState==='hidden') return;
+      reg.update().catch(()=>{});
+      navigator.serviceWorker.controller?.postMessage({type:'CHECK_APP_UPDATE'});
+    };
+    checkForUpdate();
+    setInterval(checkForUpdate,60000);
+    document.addEventListener('visibilitychange',checkForUpdate);
+    window.addEventListener('online',checkForUpdate);
+    checkOfflineStatus();
+  }).catch(err=>console.warn('SW registration failed:',err));
 }
 
 // Check whether tiles have been pre-cached
