@@ -77,6 +77,12 @@ body{font-family:'Segoe UI',-apple-system,BlinkMacSystemFont,sans-serif;height:1
 .click-hint{font-size:10px;color:#94a3b8;margin-top:4px;font-style:italic}
 .stop-card:hover .click-hint{color:var(--day-color)}
 #map{flex:1;height:100vh}
+.costco-gas-marker{background:#dc2626;border:2px solid #fff;border-radius:7px;box-shadow:0 2px 6px rgba(0,0,0,.3);display:flex;align-items:center;justify-content:center;font-size:18px}
+.leaflet-control-layers{font-family:inherit;font-size:12px}
+.location-control{background:#fff;padding:8px;border-radius:6px;box-shadow:0 1px 5px rgba(0,0,0,.35);max-width:210px}
+.location-control button{background:#2563eb;color:#fff;border:0;border-radius:4px;padding:8px 10px;font:600 12px inherit;cursor:pointer}
+.location-status{font-size:11px;color:#475569;line-height:1.4;margin-top:5px}
+.current-location-dot{background:#3b82f6;border:3px solid #fff;border-radius:50%;box-shadow:0 0 0 4px #3b82f633,0 2px 5px #0004}
 .leaflet-popup-content-wrapper{border-radius:10px;box-shadow:0 4px 20px rgba(0,0,0,.15)}
 .leaflet-popup-content{margin:10px 14px;font-family:'Segoe UI',sans-serif}
 .popup-name{font-weight:700;font-size:13px;color:#1e293b}
@@ -851,6 +857,144 @@ L.tileLayer('https://tile.openstreetmap.de/{z}/{x}/{y}.png',{
   attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
   maxZoom:18
 }).addTo(map);
+
+// Fuel locations are a separate overlay; itinerary stops and route bounds use DAYS only.
+const COSTCO_GAS_STATIONS = [
+  {
+    "name": "Costco Gas \u2014 Tracy",
+    "address": "3250 W Grant Line Rd, Tracy, CA",
+    "lat": 37.756,
+    "lng": -121.464,
+    "url": "https://www.costco.com/warehouse-locations/warehouse-179.html"
+  },
+  {
+    "name": "Costco Gas \u2014 Roseville",
+    "address": "6750 Stanford Ranch Rd, Roseville, CA",
+    "lat": 38.773,
+    "lng": -121.269,
+    "url": "https://www.costco.com/warehouse-locations/warehouse-29.html"
+  },
+  {
+    "name": "Costco Gas \u2014 Reno",
+    "address": "2200 Harvard Way, Reno, NV",
+    "lat": 39.503,
+    "lng": -119.778,
+    "url": "https://www.costco.com/warehouse-locations/warehouse-25.html"
+  },
+  {
+    "name": "Costco Gas \u2014 Sparks",
+    "address": "4810 Galleria Pkwy, Sparks, NV",
+    "lat": 39.583,
+    "lng": -119.741,
+    "url": "https://www.costco.com/warehouse-locations/warehouse-646.html"
+  },
+  {
+    "name": "Costco Gas \u2014 Twin Falls",
+    "address": "731 Pole Line Rd, Twin Falls, ID",
+    "lat": 42.593,
+    "lng": -114.475,
+    "url": "https://www.costco.com/warehouse-locations/warehouse-145.html"
+  },
+  {
+    "name": "Costco Gas \u2014 Pocatello",
+    "address": "305 W Quinn Rd, Pocatello, ID",
+    "lat": 42.907,
+    "lng": -112.467,
+    "url": "https://www.costco.com/warehouse-locations/warehouse-1033.html"
+  },
+  {
+    "name": "Costco Gas \u2014 Idaho Falls",
+    "address": "2495 E Lincoln Rd, Idaho Falls, ID",
+    "lat": 43.519,
+    "lng": -111.987,
+    "url": "https://www.costco.com/warehouse-locations/warehouse-1379.html"
+  }
+];
+const costcoGasLayer=L.layerGroup().addTo(map);
+const costcoGasIcon=L.divIcon({
+  className:'costco-gas-marker',iconSize:[30,30],iconAnchor:[15,15],popupAnchor:[0,-16],
+  html:'<span aria-hidden="true">⛽</span>'
+});
+COSTCO_GAS_STATIONS.forEach(station=>{
+  const directions='https://www.google.com/maps/dir/?api=1&destination='+encodeURIComponent('Costco Gas '+station.address);
+  L.marker([station.lat,station.lng],{
+    icon:costcoGasIcon,title:station.name,alt:station.name,zIndexOffset:25
+  }).bindTooltip(station.name).bindPopup(`
+    <div class="popup-name">${station.name}</div>
+    <div class="popup-desc">${station.address}</div>
+    <div class="popup-desc">Approximate pin. Check current gas hours before visiting.</div>
+    <div class="popup-desc"><a href="${directions}" target="_blank" rel="noopener">Directions</a> ·
+      <a href="${station.url}" target="_blank" rel="noopener">Costco details &amp; gas hours</a></div>
+  `,{maxWidth:260}).addTo(costcoGasLayer);
+});
+L.control.layers(null,{'⛽ Costco gas':costcoGasLayer},{collapsed:false,position:'topright'}).addTo(map);
+
+// Device location remains separate from the itinerary route and its bounds.
+let locationWatchId=null;
+let currentLocation=null;
+let locationMarker=null;
+let locationAccuracy=null;
+const locationControl=L.control({position:'bottomright'});
+locationControl.onAdd=()=>{
+  const container=L.DomUtil.create('div','location-control');
+  container.innerHTML='<button type="button">📍 My location</button><div class="location-status" role="status" aria-live="polite">Locating…</div>';
+  L.DomEvent.disableClickPropagation(container);
+  L.DomEvent.disableScrollPropagation(container);
+  container.querySelector('button').addEventListener('click',()=>{
+    if(currentLocation) map.setView(currentLocation,Math.max(map.getZoom(),14));
+    else startLocationTracking();
+  });
+  return container;
+};
+locationControl.addTo(map);
+const locationStatus=locationControl.getContainer().querySelector('.location-status');
+function startLocationTracking(){
+  if(!navigator.geolocation){
+    locationStatus.textContent='Location is unavailable in this browser.';
+    return;
+  }
+  if(!window.isSecureContext){
+    locationStatus.textContent='Location requires HTTPS or localhost.';
+    return;
+  }
+  if(locationWatchId!==null) navigator.geolocation.clearWatch(locationWatchId);
+  locationStatus.textContent='Locating…';
+  locationWatchId=navigator.geolocation.watchPosition(position=>{
+    const {latitude,longitude,accuracy}=position.coords;
+    currentLocation=[latitude,longitude];
+    if(!locationMarker){
+      locationAccuracy=L.circle(currentLocation,{radius:accuracy,color:'#3b82f6',weight:1,fillColor:'#3b82f6',fillOpacity:0.1,interactive:false}).addTo(map);
+      locationMarker=L.marker(currentLocation,{
+        icon:L.divIcon({className:'current-location-dot',iconSize:[20,20],iconAnchor:[10,10]}),
+        title:'Your current location',alt:'Your current location',zIndexOffset:2000
+      }).bindPopup('Your current location').addTo(map);
+    } else {
+      locationMarker.setLatLng(currentLocation);
+      locationAccuracy.setLatLng(currentLocation).setRadius(accuracy);
+    }
+    locationStatus.textContent='Blue dot: your location (±'+Math.round(accuracy)+' m)';
+  },error=>{
+    locationStatus.textContent=error.code===1
+      ?'Location access denied. Enable it in browser settings, then tap My location.'
+      :error.code===3?'Location timed out. Tap My location to retry.'
+      :'Location unavailable. Tap My location to retry.';
+    if(locationMarker) map.removeLayer(locationMarker);
+    if(locationAccuracy) map.removeLayer(locationAccuracy);
+    locationMarker=null;
+    locationAccuracy=null;
+    currentLocation=null;
+    if(locationWatchId!==null) navigator.geolocation.clearWatch(locationWatchId);
+    locationWatchId=null;
+  },{enableHighAccuracy:true,maximumAge:15000,timeout:20000});
+}
+startLocationTracking();
+window.addEventListener('pagehide',()=>{
+  if(locationWatchId!==null) navigator.geolocation.clearWatch(locationWatchId);
+  locationWatchId=null;
+});
+window.addEventListener('pageshow',event=>{
+  if(event.persisted) startLocationTracking();
+});
 
 let markers=[];
 let routeLine=null;
