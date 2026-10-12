@@ -1,6 +1,6 @@
 // Service Worker — caches app shell, map tiles, Wikipedia API, Wikipedia images
 const CACHE_VERSION = 'yellowstone-v2';
-const SHELL_CACHE = `${CACHE_VERSION}-shell-refresh-v1`;
+const SHELL_CACHE = `${CACHE_VERSION}-shell-refresh-v2-extended-trip`;
 const TILES_CACHE = `${CACHE_VERSION}-tiles`;
 const WIKI_CACHE = `${CACHE_VERSION}-wiki`;
 const IMG_CACHE = `${CACHE_VERSION}-images`;
